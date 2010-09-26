@@ -3,5 +3,12 @@ function StageAssistant() {
 }
 
 StageAssistant.prototype.setup = function() {
-	/* this function is for setup tasks that have to happen when the stage is first created */
+	/*
+	 * this function is for setup tasks that have to happen when the stage is
+	 * first created
+	 */
+	this.controller.pushScene({
+		name : 'test',
+		sceneTemplate : '../../plugins/jasmine-webos/app/views/test/test-scene'
+	});
 };
