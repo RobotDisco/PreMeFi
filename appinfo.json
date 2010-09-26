@@ -1,0 +1,9 @@
+{
+	"id": "com.p-is-np.metafilter",
+	"version": "1.0.0",
+	"vendor": "P=NP Softworks",
+	"type": "web",
+	"main": "index.html",
+	"title": "PreMeFi",
+	"icon": "icon.png"
+}
