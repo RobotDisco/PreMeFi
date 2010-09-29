@@ -1,5 +1,13 @@
 [
     {"source": "app/assistants/stage-assistant.js"},
+    
+	{
+        "scenes": ["StoryView", "test"],
+        "source": "app/assistants/StoryView-assistant.js"
+    },
+    
     {"source": "plugins/jasmine-webos/app/lib/jasmine.js"},
-	{ "source": "plugins/jasmine-webos/app/lib/jasmine-webos.js"},
+    {"source": "plugins/jasmine-webos/app/lib/jasmine-webos.js"},
+    
+    {"source": "spec/app/assistants/StoryView-spec.js"}
 ]
