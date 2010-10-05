@@ -4,6 +4,7 @@ function FeedViewAssistant(feed) {
 
 FeedViewAssistant.prototype.setup = function() {
 	this.set_feed_title();
+	this.feed.update();
 };
 
 FeedViewAssistant.prototype.activate = function(event) {
