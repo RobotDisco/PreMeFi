@@ -17,49 +17,60 @@ describe("MetaFeed", function() {
 		expect(feed.get_feed_title()).toEqual(feed.feedTitle);
 	});
 
-	it("creates an AJAX request when updating, with appropriate callbacks",
-			function() {
-				spyOn(Ajax, "Request");
-
-				feed.update();
-				expect(Ajax.Request).toHaveBeenCalledWith(feed.feedURL, {
-					onSuccess : feed.updateSuccess.bind(feed),
-					onFailure : feed.updateFailure.bind(feed),
-					jasmine.any()
-				});
-			});
-
-	it('calls the failure callback upon request failure', function() {
+	describe('when updating', function() {
 		var request;
-		spyOn(feed, "updateSuccess");
-		spyOn(feed, "updateFailure");
 
-		feed.update();
-		request = AjaxRequests.activeRequest();
-		request.response({
-			status : 500,
-			contentType : "text/html",
-			responseText : "Sorry, we hit an error"
+		it("creates an AJAX request", function() {
+			spyOn(Ajax, "Request");
+
+			feed.update();
+
+			expect(Ajax.Request).toHaveBeenCalledWith(feed.feedURL,
+					jasmine.any(Object));
 		});
 
-		expect(feed.updateSuccess).not.toHaveBeenCalled();
-		expect(feed.updateFailure).toHaveBeenCalled();
-	});
+		it('calls the failure callback upon request failure', function() {
+			spyOn(feed, "updateSuccess");
+			spyOn(feed, "updateFailure");
 
-	it('calls the success callback on request success', function() {
-		var request;
-		spyOn(feed, "updateSuccess");
-		spyOn(feed, "updateFailure");
+			feed.update();
+			request = AjaxRequests.activeRequest();
+			request.response(TestResponses.failure);
 
-		feed.update();
-		request = AjaxRequests.activeRequest();
-		request.response({
-			status : 200,
-			contentType : "text/html",
-			responseText : "Feed goes here"
+			expect(feed.updateSuccess).not.toHaveBeenCalled();
+			expect(feed.updateFailure).toHaveBeenCalled();
 		});
 
-		expect(feed.updateSuccess).toHaveBeenCalled();
-		expect(feed.updateFailure).not.toHaveBeenCalled();
+		it('calls the success callback on request success', function() {
+			spyOn(feed, "updateSuccess");
+			spyOn(feed, "updateFailure");
+
+			feed.update();
+			request = AjaxRequests.activeRequest();
+			request.response(TestResponses.success);
+
+			expect(feed.updateSuccess).toHaveBeenCalled();
+			expect(feed.updateFailure).not.toHaveBeenCalled();
+		});
+
+		it('will not success content that is not an RSS 2.0 feed', function() {
+			spyOn(feed, "processResponse");
+
+			feed.update();
+			request = AjaxRequests.activeRequest();
+			request.response(TestResponses.notXML);
+
+			expect(feed.processResponse).not.toHaveBeenCalled();
+		});
+
+		it('processes the feed on a successful request', function() {
+			spyOn(feed, "processResponse");
+
+			feed.update();
+			request = AjaxRequests.activeRequest();
+			request.response(TestResponses.success);
+
+			expect(feed.processResponse).toHaveBeenCalled();
+		});
 	});
 });

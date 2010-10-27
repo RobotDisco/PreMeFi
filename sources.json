@@ -2,6 +2,8 @@
     {"source": "app/assistants/stage-assistant.js"},
     
     {"source": "app/models/MetaFeed.js"},
+    {"source": "app/models/MetaStory.js"},
+    {"source": "app/models/FeedProcessor.js"},
     {
         "scenes": ["StoryView", "test"],
         "source": "app/assistants/StoryView-assistant.js"
@@ -12,7 +14,10 @@
     },
     {"source": "plugins/jasmine-webos/app/lib/jasmine.js"},
     {"source": "plugins/jasmine-webos/app/lib/jasmine-webos.js"},
+    {"source": "spec/app/models/test_input/TestResponses.js"},
+    {"source": "spec/app/models/test_input/TestFeedXML.js"},
     {"source": "spec/app/models/MetaFeed-spec.js"},
     {"source": "spec/app/assistants/StoryView-spec.js"},
     {"source": "spec/app/assistants/FeedView-spec.js"},
+    {"source": "spec/app/models/FeedProcessor-spec.js"}
 ]
