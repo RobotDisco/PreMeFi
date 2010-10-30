@@ -19,5 +19,6 @@
     {"source": "spec/app/models/MetaFeed-spec.js"},
     {"source": "spec/app/assistants/StoryView-spec.js"},
     {"source": "spec/app/assistants/FeedView-spec.js"},
-    {"source": "spec/app/models/FeedProcessor-spec.js"}
+    {"source": "spec/app/models/FeedProcessor-spec.js"},
+    {"source": "spec/app/models/test_input/TestFeedXML-spec.js"}
 ]
