@@ -35,7 +35,7 @@ MetaFeed.prototype.update = function() {
  * Ajax.Request failure handler
  * 
  * @param transport
- *            Ajax.Response object
+ *            {Ajax.Response} response object
  */
 MetaFeed.prototype.updateFailure = function(transport) {
 
@@ -45,7 +45,7 @@ MetaFeed.prototype.updateFailure = function(transport) {
  * Ajax.Request success handler
  * 
  * @param transport
- *            Ajax.Response object
+ *            {Ajax.Response} response object
  */
 MetaFeed.prototype.updateSuccess = function(transport) {
 
