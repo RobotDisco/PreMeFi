@@ -1,11 +1,11 @@
 describe('Feed Processor', function() {
 
-	it('should turn an <item> entry into a MetaStory', function() {
+	it('should turn an <item> entry into a MetaEntry', function() {
 		var TEST_TITLE = 'Test Title';
 		var TEST_DESCRIPTION = 'Lorum Ipsum';
 		var TEST_URL = 'http://www.blort.com';
 
-		var story_constructor = spyOn(window, 'MetaStory').andCallThrough();
+		var story_constructor = spyOn(window, 'MetaEntry').andCallThrough();
 
 		var testXML = TestFeedXML.generateItem(TEST_TITLE, TEST_DESCRIPTION,
 				TEST_URL);

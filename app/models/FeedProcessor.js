@@ -5,7 +5,7 @@ var FeedProcessor = {}; // namespace
  * 
  * @param input
  *            {Element} XML input
- * @returns {MetaStory} The resulting story object
+ * @returns {MetaEntry} The resulting story object
  */
 FeedProcessor.processItem = function(input) {
 
@@ -13,7 +13,7 @@ FeedProcessor.processItem = function(input) {
 	var story = input.getElementsByTagName('description')[0].textContent;
 	var url = input.getElementsByTagName('link')[0].textContent;
 
-	return new MetaStory(title, story, url);
+	return new MetaEntry(title, story, url);
 };
 
 /**
