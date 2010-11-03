@@ -54,23 +54,23 @@ describe("MetaFeed", function() {
 		});
 
 		it('will not success content that is not an RSS 2.0 feed', function() {
-			spyOn(feed, "processResponse");
+			spyOn(FeedProcessor, "processRSS");
 
 			feed.update();
 			request = AjaxRequests.activeRequest();
 			request.response(TestResponses.notXML);
 
-			expect(feed.processResponse).not.toHaveBeenCalled();
+			expect(FeedProcessor.processRSS).not.toHaveBeenCalled();
 		});
 
 		it('processes the feed on a successful request', function() {
-			spyOn(feed, "processResponse");
+			spyOn(FeedProcessor, "processRSS");
 
 			feed.update();
 			request = AjaxRequests.activeRequest();
 			request.response(TestResponses.success);
 
-			expect(feed.processResponse).toHaveBeenCalled();
+			expect(FeedProcessor.processRSS).toHaveBeenCalled();
 		});
 	});
 });

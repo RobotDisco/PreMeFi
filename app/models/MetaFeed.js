@@ -55,15 +55,6 @@ MetaFeed.prototype.updateSuccess = function(transport) {
 	if (xml_text.getElementsByTagName("rss").length === 0) {
 		Mojo.Log.warn("We did not get a valid RSS feed!");
 	} else {
-		this.processResponse(xml_text);
+		this.list = FeedProcessor.processRSS(xml_text);
 	}
-};
-
-/**
- * Parse the response's XML data into our story structures.
- * 
- * @param rss_string
- *            Response in RSS+XML format.
- */
-MetaFeed.prototype.processResponse = function(rss_string) {
 };
