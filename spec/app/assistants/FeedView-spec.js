@@ -1,36 +1,33 @@
 describe(
 		"Feed View",
 		function() {
-			var assistant, feed;
+			var TEST_TITLE = "test title";
+			var TEST_URL = "http://www.test.com/feed";
+
+			var feed, assistant;
 
 			beforeEach(function() {
-				feed = jasmine.createSpyObj("MetaFeed", [ "get_feed_title",
-						"update" ]);
-				assistant = jasmine.webos.createStubSceneAssistant("FeedView",
+
+				feed = new MetaFeed(TEST_TITLE, TEST_URL);
+				assistant = jasmine.webos.createStubSceneAssistant('FeedView',
 						feed);
 			});
 
-			it(
-					'should set the feed title in the view menu on startup',
+			it('should set the feed title in the view menu on startup',
 					function() {
-						var TEST_TITLE = "test title";
-						spyOn(assistant, "set_feed_title").andCallThrough();
-						assistant.feed.get_feed_title.andCallFake(function() {
-							return TEST_TITLE;
-						});
+						spyOn(assistant, 'set_feed_title');
 
 						assistant.setup();
 
-						expect(assistant.set_feed_title).toHaveBeenCalled();
-						expect(
-								assistant.controller.get("FeedView_title").innerHTML)
-								.toEqual(TEST_TITLE);
+						expect(assistant.set_feed_title.callCount).toEqual(1);
 					});
 
 			it('should tell the feed to update on startup', function() {
+				spyOn(feed, 'update');
+
 				assistant.setup();
 
-				expect(assistant.feed.update).toHaveBeenCalled();
+				expect(assistant.feed.update.callCount).toEqual(1);
 			});
 
 			xit('should update the feed when the refresh button is pressed',
@@ -50,11 +47,29 @@ describe(
 			xit('should do nothing if the feed update failed', function() {
 			});
 
-			describe('.set_feed_title', function() {
-				it('should get the title from the supplied feed', function() {
-					assistant.setup();
+			describe(
+					'.set_feed_title',
+					function() {
 
-					expect(feed.get_feed_title).toHaveBeenCalled();
-				});
-			});
+						it('should get the title from the supplied feed',
+								function() {
+									spyOn(feed, 'get_feed_title');
+
+									assistant.set_feed_title();
+
+									expect(feed.get_feed_title.callCount)
+											.toEqual(1);
+								});
+
+						it(
+								'should return the feed title',
+								function() {
+									assistant.set_feed_title();
+
+									expect(
+											assistant.controller
+													.get('FeedView_title').innerHTML)
+											.toEqual(TEST_TITLE);
+								});
+					});
 		});
