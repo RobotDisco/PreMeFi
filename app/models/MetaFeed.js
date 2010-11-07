@@ -24,6 +24,10 @@ MetaFeed.prototype.get_feed_title = function() {
  * Asychronously request the latest feed data from the feed URL.
  */
 MetaFeed.prototype.update = function() {
+
+	Mojo.Controller.getAppController().sendToNotificationChain({
+		updating : true
+	});
 	var request = new Ajax.Request(this.feedURL, {
 		method : "get",
 		onSuccess : this.updateSuccess.bind(this),
@@ -38,7 +42,10 @@ MetaFeed.prototype.update = function() {
  *            {Ajax.Response} response object
  */
 MetaFeed.prototype.updateFailure = function(transport) {
-
+	Mojo.Controller.getAppController().sendToNotificationChain({
+		updating : false
+	});
+	Mojo.Log.warn("Our update failed :(");
 };
 
 /**
@@ -55,6 +62,9 @@ MetaFeed.prototype.updateSuccess = function(transport) {
 	if (xml_text.getElementsByTagName("rss").length === 0) {
 		Mojo.Log.warn("We did not get a valid RSS feed!");
 	} else {
-		this.list = FeedProcessor.processRSS(xml_text);
+		this.feed = FeedProcessor.processRSS(xml_text);
 	}
+	Mojo.Controller.getAppController().sendToNotificationChain({
+		updating : false
+	});
 };

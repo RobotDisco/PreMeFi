@@ -76,17 +76,28 @@ describe(
 
 					expect(feed.update.callCount).toEqual(1);
 				});
-
-				it('should refresh the widget', function() {
-					spyOn(assistant.controller, 'modelChanged');
-
-					assistant.update_feed();
-
-					expect(assistant.controller.modelChanged.callCount)
-							.toEqual(1);
-					expect(assistant.controller.modelChanged)
-							.toHaveBeenCalledWith(assistant.list_widget_model,
-									assistant);
-				});
 			});
+
+			describe(
+					'notifications',
+					function() {
+
+						it(
+								'should update the widget when we are notified of a completed update',
+								function() {
+									spyOn(assistant.controller, 'modelChanged');
+
+									assistant.considerForNotification({
+										updating : false
+									});
+
+									expect(
+											assistant.controller.modelChanged.callCount)
+											.toEqual(1);
+									expect(assistant.controller.modelChanged)
+											.toHaveBeenCalledWith(
+													assistant.list_widget_model,
+													assistant);
+								});
+					});
 		});
