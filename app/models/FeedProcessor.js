@@ -21,18 +21,15 @@ FeedProcessor.processItem = function(input) {
  * 
  * @param input
  *            {Element} XML input
- * @returns {MetaFeed} The resulting feed object
+ * @returns {Array(MetaEntry)} The resulting feed object
  */
 FeedProcessor.processRSS = function(input) {
-	var feed_title = input.getElementsByTagName('title')[0];
-	var feed_url = input.getElementsByTagName('link')[0];
-
-	var feed = new MetaFeed(feed_title, feed_url);
+	var list = [];
 
 	var items = input.getElementsByTagName('item');
 	for ( var i = 0; i < items.length; ++i) {
-		feed.list[i] = FeedProcessor.processItem(items[i]);
+		list[i] = FeedProcessor.processItem(items[i]);
 	}
 
-	return feed;
+	return list;
 };

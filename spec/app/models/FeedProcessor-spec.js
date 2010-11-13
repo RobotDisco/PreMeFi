@@ -20,8 +20,7 @@ describe('Feed Processor', function() {
 	});
 
 	it('should turn an <rss> entry into a MetaFeed', function() {
-		var feed_constructor = spyOn(window, 'MetaFeed').andCallThrough();
-		spyOn(FeedProcessor, 'processItem');
+		spyOn(FeedProcessor, 'processItem').andCallThrough();
 
 		var TEST_TITLE = "A Test Feed";
 		var TEST_DESCRIPTION = "This is a Test Feed";
@@ -31,10 +30,10 @@ describe('Feed Processor', function() {
 
 		var testRSS = TestFeedXML.generateFeed(TEST_TITLE, TEST_DESCRIPTION,
 				TEST_LINK, NUM_ENTRIES);
-		var testFeed = FeedProcessor.processRSS(testRSS);
+		var testList = FeedProcessor.processRSS(testRSS);
 
-		expect(feed_constructor.callCount).toEqual(1);
 		expect(FeedProcessor.processItem.callCount).toEqual(NUM_ENTRIES);
-
+		expect(testList.length).toEqual(NUM_ENTRIES);
+		expect(testList).toContain(jasmine.any(MetaEntry));
 	});
 });
