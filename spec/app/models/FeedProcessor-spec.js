@@ -19,7 +19,7 @@ describe('Feed Processor', function() {
 		});
 	});
 
-	it('should turn an <rss> entry into a MetaFeed', function() {
+	it('should turn an <rss> entry into a list of stories', function() {
 		spyOn(FeedProcessor, 'processItem').andCallThrough();
 
 		var TEST_TITLE = "A Test Feed";

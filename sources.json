@@ -1,6 +1,5 @@
 [
     {"source": "app/assistants/stage-assistant.js"},
-    
     {"source": "app/models/MetaFeed.js"},
     {"source": "app/models/MetaEntry.js"},
     {"source": "app/models/FeedProcessor.js"},
@@ -21,5 +20,6 @@
     {"source": "spec/app/assistants/FeedView-spec.js"},
     {"source": "spec/app/models/FeedProcessor-spec.js"},
     {"source": "spec/app/models/test_input/TestFeedXML-spec.js"},
-    {"source": "spec/app/models/MetaEntry-spec.js"}
+    {"source": "spec/app/models/MetaEntry-spec.js"},
+    {"source": "spec/app/assistants/stage-assistant-spec.js"}
 ]
