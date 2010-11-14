@@ -12,10 +12,7 @@ describe('Feed Processor', function() {
 		var testStory = FeedProcessor.processItem(testXML);
 
 		expect(story_constructor.callCount).toEqual(1);
-		expect(testStory).toEqual({
-			title : TEST_TITLE,
-			story : TEST_DESCRIPTION,
-			url : TEST_URL
+		expect(testStory).toEqual(new MetaEntry(TEST_TITLE, TEST_DESCRIPTION, TEST_URL));
 		});
 	});
 
