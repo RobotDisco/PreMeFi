@@ -14,6 +14,20 @@ describe(
 						feed);
 			});
 
+			it('should set up list widget on startup', function() {
+				spyOn(assistant.controller, 'setupWidget');
+
+				assistant.setup();
+
+				expect(assistant.controller.setupWidget).toHaveBeenCalledWith(
+						'story_list', {
+							hasNoWidgets : true,
+							itemTemplate : "FeedView/story_list"
+						}, {
+							items : []
+						});
+			});
+
 			it('should set the feed title in the view menu on startup',
 					function() {
 						spyOn(assistant, 'set_feed_title');

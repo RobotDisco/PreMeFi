@@ -12,7 +12,7 @@ FeedViewAssistant.prototype.setup = function() {
 	/* Setup widgets */
 	this.controller.setupWidget('story_list', {
 		hasNoWidgets : true,
-		itemTemplate : "views/FeedView/story_list.html"
+		itemTemplate : "FeedView/story_list"
 	}, this.list_widget_model);
 };
 
@@ -39,7 +39,7 @@ FeedViewAssistant.prototype.update_feed = function() {
 FeedViewAssistant.prototype.considerForNotification = function(
 		notification_message) {
 	if (notification_message.updating === false) {
-		this.list_widget_model.items = this.feed.list;
+		this.list_widget_model.items = this.feed.list.slice(0);
 		this.controller.modelChanged(this.list_widget_model, this);
 	}
 	return undefined;

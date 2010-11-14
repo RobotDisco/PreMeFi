@@ -62,7 +62,7 @@ MetaFeed.prototype.updateSuccess = function(transport) {
 	if (xml_text.getElementsByTagName("rss").length === 0) {
 		Mojo.Log.warn("We did not get a valid RSS feed!");
 	} else {
-		this.feed = FeedProcessor.processRSS(xml_text);
+		this.list = FeedProcessor.processRSS(xml_text);
 	}
 	Mojo.Controller.getAppController().sendToNotificationChain({
 		updating : false
