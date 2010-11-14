@@ -2,3 +2,10 @@
 #StoryView_story_text {
 	font-size: 16pt;
 }
+
+.feed-teaser {
+        padding: 0px 14px 10px 14px;
+        font-size: 14px;
+        margin-top: -12px;
+        line-height: 16px;
+}

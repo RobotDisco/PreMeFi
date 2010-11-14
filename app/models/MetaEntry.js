@@ -18,4 +18,5 @@ function MetaEntry(title, story, url) {
 	var tmp = document.createElement("DIV");
 	tmp.innerHTML = this.story;
 	this.teaser = tmp.textContent;
+	delete tmp; //Explicitly delete, tmp is not a private variable
 };
