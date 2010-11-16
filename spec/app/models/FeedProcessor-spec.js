@@ -14,7 +14,6 @@ describe('Feed Processor', function() {
 		expect(story_constructor.callCount).toEqual(1);
 		expect(testStory).toEqual(new MetaEntry(TEST_TITLE, TEST_DESCRIPTION, TEST_URL));
 		});
-	});
 
 	it('should turn an <rss> entry into a list of stories', function() {
 		spyOn(FeedProcessor, 'processItem').andCallThrough();
