@@ -32,6 +32,9 @@ FeedViewAssistant.prototype.setup = function(){
     }, this.list_widget_model);
     this.controller.setupWidget(Mojo.Menu.commandMenu, {}, this.command_menu_model);
 	this.controller.setupWidget(Mojo.Menu.appMenu, {}, this.app_menu_model);
+	
+	/* Event listeners */
+	this.controller.listen(this.controller.get("story_list"), Mojo.Event.listTap, this.display_story.bindAsEventListener(this));
 };
 
 FeedViewAssistant.prototype.activate = function(event){
@@ -41,6 +44,8 @@ FeedViewAssistant.prototype.deactivate = function(event){
 };
 
 FeedViewAssistant.prototype.cleanup = function(event){
+	/* Clean up event listeners */ 
+	this.controller.stopListening(this.controller.get("story_list"), Mojo.Event.listTap, this.display_story.bindAsEventListener(this));
 };
 
 FeedViewAssistant.prototype.set_feed_title = function(){
@@ -76,4 +81,8 @@ FeedViewAssistant.prototype.handleCommand = function(event){
 				break;
         }
     }
+};
+
+FeedViewAssistant.prototype.display_story = function(event) {
+	this.controller.stageController.pushScene("StoryView", event.item.title, event.item.story);
 };
