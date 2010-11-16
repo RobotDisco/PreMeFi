@@ -1,18 +1,24 @@
 function FeedViewAssistant(feed){
-	this.feed = feed;
-	this.list_widget_model = {
-		items: this.feed.list
-	};
-	this.command_menu_model = {
+    this.feed = feed;
+    this.list_widget_model = {
+        items: this.feed.list
+    };
+	this.app_menu_model = {
 		items: [{
-			items: []
-		}, {
-			items: [{
-				icon: "refresh",
-				command: "refresh_feed"
-			}]
+			label: "Unit Tests...",
+			command: "launch_unit_tests"
 		}]
 	};
+    this.command_menu_model = {
+        items: [{
+            items: []
+        }, {
+            items: [{
+                icon: "refresh",
+                command: "refresh_feed"
+            }]
+        }]
+    };
 }
 
 FeedViewAssistant.prototype.setup = function(){
@@ -24,8 +30,8 @@ FeedViewAssistant.prototype.setup = function(){
         hasNoWidgets: true,
         itemTemplate: "FeedView/story_list"
     }, this.list_widget_model);
-    this.controller.setupWidget(Mojo.Menu.commandMenu, {},
-		this.command_menu_model);
+    this.controller.setupWidget(Mojo.Menu.commandMenu, {}, this.command_menu_model);
+	this.controller.setupWidget(Mojo.Menu.appMenu, {}, this.app_menu_model);
 };
 
 FeedViewAssistant.prototype.activate = function(event){
@@ -57,11 +63,17 @@ FeedViewAssistant.prototype.considerForNotification = function(notification_mess
 };
 
 FeedViewAssistant.prototype.handleCommand = function(event){
-	if (event.type === Mojo.Event.command) {
-		switch (event.command) {
-			case 'refresh_feed':
-				this.feed.update();
+    if (event.type === Mojo.Event.command) {
+        switch (event.command) {
+            case 'refresh_feed':
+                this.feed.update();
+                break;
+			case 'launch_unit_tests':
+				this.controller.stageController.pushScene({
+					name: 'test',
+    				sceneTemplate: '../../plugins/jasmine-webos/app/views/test/test-scene'
+				});
 				break;
-		}
-	}
+        }
+    }
 };

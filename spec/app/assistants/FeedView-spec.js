@@ -105,4 +105,26 @@ describe("Feed View", function(){
 				
 		expect(feed.update.callCount).toEqual(1);
 	});
+	it('should run unit tests when requested', function() {
+		spyOn(assistant.controller.stageController, 'pushScene');
+		spyOn(assistant.controller, 'setupWidget').andCallThrough();
+		
+		expect(assistant.app_menu_model.items).toContain({
+			label: "Unit Tests...",
+			command: 'launch_unit_tests'
+		});
+		
+		assistant.setup();
+		expect(assistant.controller.setupWidget).toHaveBeenCalledWith(Mojo.Menu.appMenu, jasmine.any(Object), assistant.app_menu_model);
+		
+		assistant.handleCommand({
+			type: Mojo.Event.command,
+			command: 'launch_unit_tests'
+		});		
+		expect(assistant.controller.stageController.pushScene).toHaveBeenCalledWith({
+    		name: 'test',
+    		sceneTemplate: '../../plugins/jasmine-webos/app/views/test/test-scene'
+  		});
+	});
 });
+	
