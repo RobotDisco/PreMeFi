@@ -1,3 +1,4 @@
+/** Namespace for fake responses */
 var TestResponses = {
 	failure : {
 		status : 500,

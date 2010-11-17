@@ -1,20 +1,23 @@
 /**
  * @constructor
  * 
- * @param feedTitle
+ * @param {String} feedTitle
  *            Free-text title of feed
- * @param feedURL
+ * @param {String} feedURL
  *            URL for feed (RSS, not associated web page)
- * @returns {MetaFeed}
  */
 function MetaFeed(feedTitle, feedURL) {
+	/** Feed Title */
 	this.feedTitle = feedTitle;
+	/** Feed URL */
 	this.feedURL = feedURL;
+	/** List of stories in feed */
 	this.list = [];
-};
+}
 
 /**
  * @returns Feed Title
+ * @type String
  */
 MetaFeed.prototype.get_feed_title = function() {
 	return this.feedTitle;
@@ -38,8 +41,7 @@ MetaFeed.prototype.update = function() {
 /**
  * Ajax.Request failure handler
  * 
- * @param transport
- *            {Ajax.Response} response object
+ * @param {Ajax.Response} transport response object
  */
 MetaFeed.prototype.updateFailure = function(transport) {
 	Mojo.Controller.getAppController().sendToNotificationChain({
@@ -51,8 +53,7 @@ MetaFeed.prototype.updateFailure = function(transport) {
 /**
  * Ajax.Request success handler
  * 
- * @param transport
- *            {Ajax.Response} response object
+ * @param {Ajax.Response} transport response object
  */
 MetaFeed.prototype.updateSuccess = function(transport) {
 

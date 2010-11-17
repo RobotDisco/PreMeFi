@@ -1,5 +1,14 @@
-var TestFeedXML = {}; // namespace
+/** namespace */
+var TestFeedXML = {};
 
+/**
+ * Generate necessary RSS data for an <item> XML node
+ * @param {String} title to generate XML for
+ * @param {String} story to generate XML for
+ * @param {String} link to generate XML for
+ * @returns XML DOM node for an <item> object
+ * @type {Element}
+ */
 TestFeedXML.generateItem = function(title, story, link) {
 	var item = document.createElement('item');
 
@@ -19,6 +28,16 @@ TestFeedXML.generateItem = function(title, story, link) {
 	return item;
 };
 
+/**
+ * Generate RSS feed
+ * @param {String} title to generate RSS for
+ * @param {String} description to generate RSS for
+ * @param {String} link to generate RSS for
+ * @param {Number} num_entries to generate RSS for
+ * @returns root RSS DOM node
+ * @type {Element}
+ * @requires TestFeedXML.generateItem to generate DOM nodes for individual items 
+ */
 TestFeedXML.generateFeed = function(title, description, link, num_entries) {
 	var rss_entry = document.createElement('rss');
 	rss_entry.setAttribute('version', '2.0');

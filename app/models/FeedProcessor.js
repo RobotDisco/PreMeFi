@@ -1,11 +1,13 @@
-var FeedProcessor = {}; // namespace
+/** namespace */
+var FeedProcessor = {};
 
 /**
  * Generate a MetaStory from XML
  * 
  * @param input
  *            {Element} XML input
- * @returns {MetaEntry} The resulting story object
+ * @returns The resulting story object
+ * @type MetaEntry
  */
 FeedProcessor.processItem = function(input) {
 
@@ -18,10 +20,10 @@ FeedProcessor.processItem = function(input) {
 
 /**
  * Generate a MetaFeed from XML
- * 
- * @param input
- *            {Element} XML input
- * @returns {Array(MetaEntry)} The resulting feed object
+ *
+ * @param {Element} input XML input
+ * @returns A list of MetaEntry objects
+ * @type [MetaEntry]
  */
 FeedProcessor.processRSS = function(input) {
 	var list = [];
