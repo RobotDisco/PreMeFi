@@ -145,7 +145,7 @@ describe("Feed View", function(){
 		expect(assistant.controller.stageController.pushScene).toHaveBeenCalledWith("StoryView", feed.list[0].title, feed.list[0].story);
 		
 		assistant.cleanup();
-		expect(assistant.controller.stopListening).toHaveBeenCalledWith(assistant.controller.get("story_list"), Mojo.Event.listTap, assistant.display_story));
+		expect(assistant.controller.stopListening).toHaveBeenCalledWith(assistant.controller.get("story_list"), Mojo.Event.listTap, assistant.display_story);
 	});
 });
 	
