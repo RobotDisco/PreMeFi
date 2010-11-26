@@ -41,7 +41,8 @@ FeedViewAssistant.prototype.setup = function(){
 	this.controller.setupWidget(Mojo.Menu.appMenu, {}, this.app_menu_model);
 	
 	/* Event listeners */
-	this.controller.listen(this.controller.get("story_list"), Mojo.Event.listTap, this.display_story.bindAsEventListener(this));
+	this.display_story_handler = this.display_story.bindAsEventListener(this);
+	this.controller.listen("story_list", Mojo.Event.listTap, this.display_story_handler);
 };
 
 /**
@@ -64,7 +65,7 @@ FeedViewAssistant.prototype.deactivate = function(event){
  */
 FeedViewAssistant.prototype.cleanup = function(event){
 	/* Clean up event listeners */ 
-	this.controller.stopListening(this.controller.get("story_list"), Mojo.Event.listTap, this.display_story.bindAsEventListener(this));
+	this.controller.stopListening(this.controller.get("story_list"), Mojo.Event.listTap, this.display_story_handler);
 };
 
 /**

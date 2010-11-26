@@ -137,7 +137,7 @@ describe("Feed View", function(){
 		spyOn(assistant.controller, 'stopListening');
 		
 		assistant.setup();
-		expect(assistant.controller.listen).toHaveBeenCalledWith(assistant.controller.get("story_list"), Mojo.Event.listTap, assistant.display_story);
+		expect(assistant.controller.listen).toHaveBeenCalledWith('story_list', Mojo.Event.listTap, assistant.display_story_handler);
 		
 		assistant.display_story({
 			item: feed.list[0]
@@ -145,7 +145,7 @@ describe("Feed View", function(){
 		expect(assistant.controller.stageController.pushScene).toHaveBeenCalledWith("StoryView", feed.list[0].title, feed.list[0].story);
 		
 		assistant.cleanup();
-		expect(assistant.controller.stopListening).toHaveBeenCalledWith(assistant.controller.get("story_list"), Mojo.Event.listTap, assistant.display_story);
+		expect(assistant.controller.stopListening).toHaveBeenCalledWith(assistant.controller.get("story_list"), Mojo.Event.listTap, assistant.display_story_handler);
 	});
 });
 	
