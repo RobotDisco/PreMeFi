@@ -25,11 +25,15 @@ describe("Feed View", function(){
     });
     
     it('should set the feed title in the view menu on startup', function(){
-        spyOn(assistant, 'set_feed_title');
+		spyOn(assistant.controller, 'setupWidget');
+		
+		expect(assistant.view_menu_model.items).toContain({
+			label: assistant.feed.feedTitle
+		});
         
         assistant.setup();
         
-        expect(assistant.set_feed_title.callCount).toEqual(1);
+		expect(assistant.controller.setupWidget).toHaveBeenCalledWith(Mojo.Menu.viewMenu, {}, assistant.view_menu_model);
     });
     it('should tell the feed to update on startup', function(){
         spyOn(assistant, 'update_feed');
@@ -55,21 +59,6 @@ describe("Feed View", function(){
     xit('should display a story (by pushing the Story View) when a story is clicked', function(){
     });
     xit('should do nothing if the feed update failed', function(){
-    });
-    
-    describe('.set_feed_title', function(){
-        it('should get the title from the supplied feed', function(){
-            spyOn(feed, 'get_feed_title');
-            
-            assistant.set_feed_title();
-            
-            expect(feed.get_feed_title.callCount).toEqual(1);
-        });
-        it('should return the feed title', function(){
-            assistant.set_feed_title();
-            
-            expect(assistant.controller.get('FeedView_title').innerHTML).toEqual(TEST_TITLE);
-        });
     });
     
     describe('.update_feed', function(){

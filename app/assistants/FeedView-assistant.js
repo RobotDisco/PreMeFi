@@ -7,12 +7,12 @@ function FeedViewAssistant(feed){
     this.list_widget_model = {
         items: this.feed.list
     };
-	this.app_menu_model = {
-		items: [{
-			label: "Unit Tests...",
-			command: "launch_unit_tests"
-		}]
-	};
+    this.app_menu_model = {
+        items: [{
+            label: "Unit Tests...",
+            command: "launch_unit_tests"
+        }]
+    };
     this.command_menu_model = {
         items: [{
             items: []
@@ -23,13 +23,17 @@ function FeedViewAssistant(feed){
             }]
         }]
     };
+    this.view_menu_model = {
+        items: [{}, {
+            label: this.feed.feedTitle
+        }, {}]
+    };
 }
 
 /**
  * Prepare FeedView assistant for use
  */
 FeedViewAssistant.prototype.setup = function(){
-    this.set_feed_title();
     this.update_feed();
     
     /* Setup widgets */
@@ -37,12 +41,13 @@ FeedViewAssistant.prototype.setup = function(){
         hasNoWidgets: true,
         itemTemplate: "FeedView/story_list"
     }, this.list_widget_model);
+    this.controller.setupWidget(Mojo.Menu.appMenu, {}, this.app_menu_model);
     this.controller.setupWidget(Mojo.Menu.commandMenu, {}, this.command_menu_model);
-	this.controller.setupWidget(Mojo.Menu.appMenu, {}, this.app_menu_model);
-	
-	/* Event listeners */
-	this.display_story_handler = this.display_story.bindAsEventListener(this);
-	this.controller.listen("story_list", Mojo.Event.listTap, this.display_story_handler);
+    this.controller.setupWidget(Mojo.Menu.viewMenu, {}, this.view_menu_model);
+    
+    /* Event listeners */
+    this.display_story_handler = this.display_story.bindAsEventListener(this);
+    this.controller.listen("story_list", Mojo.Event.listTap, this.display_story_handler);
 };
 
 /**
@@ -64,18 +69,8 @@ FeedViewAssistant.prototype.deactivate = function(event){
  * @param {Mojo.Event} event that invoked this function
  */
 FeedViewAssistant.prototype.cleanup = function(event){
-	/* Clean up event listeners */ 
-	this.controller.stopListening(this.controller.get("story_list"), Mojo.Event.listTap, this.display_story_handler);
-};
-
-/**
- * Set the page's title pill to reflect the viewed feed
- */
-FeedViewAssistant.prototype.set_feed_title = function(){
-    var title_element;
-    
-    title_element = this.controller.get("FeedView_title");
-    title_element.innerHTML = this.feed.get_feed_title();
+    /* Clean up event listeners */
+    this.controller.stopListening(this.controller.get("story_list"), Mojo.Event.listTap, this.display_story_handler);
 };
 
 /**
@@ -107,12 +102,12 @@ FeedViewAssistant.prototype.handleCommand = function(event){
             case 'refresh_feed':
                 this.feed.update();
                 break;
-			case 'launch_unit_tests':
-				this.controller.stageController.pushScene({
-					name: 'test',
-    				sceneTemplate: '../../plugins/jasmine-webos/app/views/test/test-scene'
-				});
-				break;
+            case 'launch_unit_tests':
+                this.controller.stageController.pushScene({
+                    name: 'test',
+                    sceneTemplate: '../../plugins/jasmine-webos/app/views/test/test-scene'
+                });
+                break;
         }
     }
 };
@@ -121,6 +116,6 @@ FeedViewAssistant.prototype.handleCommand = function(event){
  * Event handler for when a message is selected from the feed list
  * @param {Mojo.Event.listTap} event that invoked this handler
  */
-FeedViewAssistant.prototype.display_story = function(event) {
-	this.controller.stageController.pushScene("StoryView", event.item.title, event.item.story);
+FeedViewAssistant.prototype.display_story = function(event){
+    this.controller.stageController.pushScene("StoryView", event.item.title, event.item.story);
 };
