@@ -24,11 +24,19 @@ describe("Feed View", function(){
         });
     });
     
-    it('should set the feed title in the view menu on startup', function(){
+    it('should set the view menu on startup', function(){
 		spyOn(assistant.controller, 'setupWidget');
 		
-		expect(assistant.view_menu_model.items).toContain({
+		expect(assistant.view_menu_model.items[0].items).toContain({
 			label: assistant.feed.feedTitle
+		});
+		expect(assistant.view_menu_model.items[0].items).toContain({
+			icon: 'back',
+			command: 'previous_feed'
+		});
+		expect(assistant.view_menu_model.items[0].items).toContain({
+			icon: 'forward',
+			command: 'next_feed'
 		});
         
         assistant.setup();
@@ -42,7 +50,7 @@ describe("Feed View", function(){
         
         expect(assistant.update_feed.callCount).toEqual(1);
     });
-    it('should updatethe list model when the feed finishes updating', function(){
+    it('should update the list model when the feed finishes updating', function(){
         spyOn(assistant.controller, 'modelChanged');
         
         assistant.considerForNotification({
@@ -134,7 +142,7 @@ describe("Feed View", function(){
 		expect(assistant.controller.stageController.pushScene).toHaveBeenCalledWith("StoryView", feed.list[0].title, feed.list[0].story);
 		
 		assistant.cleanup();
-		expect(assistant.controller.stopListening).toHaveBeenCalledWith(assistant.controller.get("story_list"), Mojo.Event.listTap, assistant.display_story_handler);
+		expect(assistant.controller.stopListening).toHaveBeenCalledWith("story_list", Mojo.Event.listTap, assistant.display_story_handler);
 	});
 });
 	

@@ -24,10 +24,18 @@ function FeedViewAssistant(feed){
         }]
     };
     this.view_menu_model = {
-        items: [{}, {
-            label: this.feed.feedTitle
-        }, {}]
-    };
+		items: [{
+			items: [{
+				icon: 'back',
+				command: 'previous_feed'
+			}, {
+				label: this.feed.feedTitle
+			}, {
+				icon: 'forward',
+				command: 'next_feed'
+			}]
+		}]
+	};
 }
 
 /**
@@ -70,7 +78,7 @@ FeedViewAssistant.prototype.deactivate = function(event){
  */
 FeedViewAssistant.prototype.cleanup = function(event){
     /* Clean up event listeners */
-    this.controller.stopListening(this.controller.get("story_list"), Mojo.Event.listTap, this.display_story_handler);
+    this.controller.stopListening("story_list", Mojo.Event.listTap, this.display_story_handler);
 };
 
 /**
