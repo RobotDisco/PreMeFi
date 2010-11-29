@@ -15,6 +15,5 @@ StageAssistant.prototype.setup = function() {
 	 * this function is for setup tasks that have to happen when the stage is
 	 * first created
 	 */
-	this.controller.pushScene('FeedView', new MetaFeed(this.DEFAULT_FEED_TITLE,
-			this.DEFAULT_FEED_URL));
+	this.controller.pushScene('FeedView', MetaFeedList[0]);
 };

@@ -10,8 +10,7 @@ describe('Stage Assistant', function() {
 				assistant.setup();
 				expect(assistant.controller.pushScene).toHaveBeenCalledWith(
 						'FeedView',
-						new MetaFeed(assistant.DEFAULT_FEED_TITLE,
-								assistant.DEFAULT_FEED_URL));
+						MetaFeedList[0]);
 			});
 
 });
