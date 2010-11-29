@@ -28,6 +28,7 @@ describe("Feed View", function(){
 		spyOn(assistant.controller, 'setupWidget');
 		
 		expect(assistant.view_menu_model.items[0].items).toContain({
+			width: 200,
 			label: assistant.feed.feedTitle
 		});
 		expect(assistant.view_menu_model.items[0].items).toContain({

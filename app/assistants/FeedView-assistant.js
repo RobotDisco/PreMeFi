@@ -29,6 +29,7 @@ function FeedViewAssistant(feed){
 				icon: 'back',
 				command: 'previous_feed'
 			}, {
+				width: 200,
 				label: this.feed.feedTitle
 			}, {
 				icon: 'forward',
