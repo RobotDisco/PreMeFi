@@ -1,6 +1,7 @@
 [
     {"source": "app/assistants/stage-assistant.js"},
     {"source": "app/models/MetaFeed.js"},
+    {"source": "app/models/MetaFeedList.js"},
     {"source": "app/models/MetaEntry.js"},
     {"source": "app/models/FeedProcessor.js"},
     {

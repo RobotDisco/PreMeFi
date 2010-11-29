@@ -15,3 +15,11 @@ describe('Stage Assistant', function() {
 			});
 
 });
+
+describe('MetaFeedList', function() {
+	
+	it('should be defined', function() {
+		expect(MetaFeedList).toBeDefined();
+		expect(MetaFeedList).toContain(jasmine.any(MetaFeed));
+	});
+});
