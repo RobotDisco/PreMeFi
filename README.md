@@ -37,4 +37,4 @@ Progress can be tracked via [Pivotal Tracker](https://www.pivotaltracker.com/pro
 <br />
 ## Completion is Undecidable ##
 ---
-_© 2010 The Lambda Calculus. Rights of physical liason have been licensed, under certain terms, to Gaelan D'costa. The Lambda Calculus logo is not [its](http://en.wikipedia.org/wiki/File:Lambda_uc_lc.svg) logo. The Lambda Calculus is NOT [the Lambda Calculus](http://visual-languages.blogspot.com/2008/12/alligator-eggs.html)._
+_Copyright (C) 2010  Gaelan D'costa <gdcosta@gmail.com>. Rights of physical liason have been licensed, under certain terms, to Gaelan D'costa. The Lambda Calculus logo is not [its](http://en.wikipedia.org/wiki/File:Lambda_uc_lc.svg) logo. The Lambda Calculus is NOT [the Lambda Calculus](http://visual-languages.blogspot.com/2008/12/alligator-eggs.html)._
