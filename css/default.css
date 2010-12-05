@@ -1,0 +1,28 @@
+body {
+	background-color: black;
+	color: white;
+	font-family: "Trebuchet MS", Helvetica, sans-serif;
+}
+
+a:link {
+	color: #CCCCCC;
+}
+a:visited {
+	color: #CCCCCC;
+}
+
+table, th, td {
+	border-color: #888;
+	border-style: solid;
+	border-width: thin;
+	font-style: italic;
+	border-collapse: collapse;
+	padding-left: 10px;
+	padding-right: 10px;
+}
+
+td {
+	padding-bottom: 4px;
+	padding-top: 1px;
+}
+
