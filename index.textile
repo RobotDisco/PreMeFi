@@ -11,7 +11,7 @@ h4. A MetaFilter reader for Palm's WebOS
 
 | *Projekt 1 {* |[download package] | ["access source":http://www.github.com/thelambdacalculus/PreMeFi] | ["project tracker":https://www.pivotaltracker.com/projects/96950] |
 
-!>/images/screenshot.png!
+!>/PreMeFi/images/screenshot.png!
 
 
 h3. Abstract
