@@ -1,4 +1,3 @@
-require "rss"
 //  PreMeFi - A MetaFilter viewer for Palm's WebOS
 //  Copyright (C) 2010  Gaelan D'costa <gdcosta@gmail.com>
 //
