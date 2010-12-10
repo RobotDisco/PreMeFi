@@ -23,3 +23,30 @@ MetaFeedList = [
 	new MetaFeed("MeFi IRL", "http://feeds.feedburner.com/MeFiIRL"),
 	new MetaFeed("MetaTalk", "http://feeds.feedburner.com/MeFi/MetaTalk")
 ];
+
+/**
+ * Give us the previous feed in this circular feed list
+ * @param curr_index Index to decrement
+ * @return Previous feed index
+ * @type Number
+ */
+MetaFeedList.prev_index = function(curr_index) {
+	var new_index = (curr_index - 1) % MetaFeedList.length;
+	
+	// Fix stupid Javascript's bug of leaving negative numbers
+	// with negative modulos
+	if(new_index < 0) {
+		new_index += MetaFeedList.length;
+	}
+	return new_index;
+};
+
+/**
+ * Give us the next feed in this circular feed list
+ * @param curr_index Index to increment
+ * @return Next feed index
+ * @type Number
+ */
+MetaFeedList.next_index = function(curr_index) {
+	return (curr_index + 1) % MetaFeedList.length;
+};

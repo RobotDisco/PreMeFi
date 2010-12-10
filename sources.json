@@ -38,5 +38,6 @@
     {"source": "spec/app/models/FeedProcessor-spec.js"},
     {"source": "spec/app/models/test_input/TestFeedXML-spec.js"},
     {"source": "spec/app/models/MetaEntry-spec.js"},
-    {"source": "spec/app/assistants/stage-assistant-spec.js"}
+    {"source": "spec/app/assistants/stage-assistant-spec.js"},
+	{"source": "spec/app/models/MetaFeedList-spec.js"}
 ]
