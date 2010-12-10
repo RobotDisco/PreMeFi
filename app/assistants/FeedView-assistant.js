@@ -19,8 +19,9 @@
  * @param {MetaFeed}
  *            feed to list
  */
-function FeedViewAssistant(feed) {
-	this.feed = feed;
+function FeedViewAssistant(feed_index) {
+	this.feed = MetaFeedList[feed_index];
+	
 	this.list_widget_model = {
 		items : this.feed.list
 	};

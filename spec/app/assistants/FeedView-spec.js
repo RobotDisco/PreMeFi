@@ -14,17 +14,11 @@
 //  You should have received a copy of the GNU General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-describe("Feed View", function(){
-    var TEST_TITLE = "test title";
-    var TEST_DESCRIPTION = "A test feed";
-    var TEST_URL = "http://www.test.com/feed";
-    
-    var feed, assistant;
+describe("Feed View", function(){    
+    var assistant;
     
     beforeEach(function(){
-    
-        feed = new MetaFeed(TEST_TITLE, TEST_URL);
-        assistant = jasmine.webos.createStubSceneAssistant('FeedView', feed);
+        assistant = jasmine.webos.createStubSceneAssistant('FeedView', 0);
     });
     
     it('should set up list widget on startup', function(){
@@ -36,7 +30,7 @@ describe("Feed View", function(){
             hasNoWidgets: true,
             itemTemplate: "FeedView/story_list"
         }, {
-            items: []
+            items: assistant.feed.list
         });
     });
     
@@ -89,11 +83,11 @@ describe("Feed View", function(){
     describe('.update_feed', function(){
     
         it('should update the feed', function(){
-            spyOn(feed, 'update');
+            spyOn(assistant.feed, 'update');
             
             assistant.update_feed();
             
-            expect(feed.update.callCount).toEqual(1);
+            expect(assistant.feed.update.callCount).toEqual(1);
         });
         
     });
@@ -110,14 +104,14 @@ describe("Feed View", function(){
         expect(assistant.controller.setupWidget).toHaveBeenCalledWith(Mojo.Menu.commandMenu, jasmine.any(Object),assistant.command_menu_model);
     });
 	it('should update the displayed feed when the refresh button is pressed', function() {
-		spyOn(feed, 'update');
+		spyOn(assistant.feed, 'update');
 		
 		assistant.handleCommand({
 			type: Mojo.Event.command,
 			command: 'refresh_feed'
 		});
 				
-		expect(feed.update.callCount).toEqual(1);
+		expect(assistant.feed.update.callCount).toEqual(1);
 	});
 	it('should run unit tests when requested', function() {
 		spyOn(assistant.controller.stageController, 'pushScene');
@@ -144,7 +138,7 @@ describe("Feed View", function(){
 		var TEST_TITLE = "Test Entry";
 		var TEST_DESCRIPTION = "This is a Test Entry";
 		var TEST_URL = "http://www.test.com";
-		feed.list[0] = new MetaEntry(TEST_TITLE, TEST_DESCRIPTION, TEST_URL);
+		assistant.feed.list[0] = new MetaEntry(TEST_TITLE, TEST_DESCRIPTION, TEST_URL);
 		
 		spyOn(assistant.controller.stageController, 'pushScene');
 		spyOn(assistant.controller, 'listen');
@@ -154,9 +148,9 @@ describe("Feed View", function(){
 		expect(assistant.controller.listen).toHaveBeenCalledWith('story_list', Mojo.Event.listTap, assistant.display_story_handler);
 		
 		assistant.display_story({
-			item: feed.list[0]
+			item: assistant.feed.list[0]
 		});
-		expect(assistant.controller.stageController.pushScene).toHaveBeenCalledWith("StoryView", feed.list[0].title, feed.list[0].story);
+		expect(assistant.controller.stageController.pushScene).toHaveBeenCalledWith("StoryView", assistant.feed.list[0].title, assistant.feed.list[0].story);
 		
 		assistant.cleanup();
 		expect(assistant.controller.stopListening).toHaveBeenCalledWith("story_list", Mojo.Event.listTap, assistant.display_story_handler);

@@ -26,7 +26,7 @@ describe('Stage Assistant', function() {
 				assistant.setup();
 				expect(assistant.controller.pushScene).toHaveBeenCalledWith(
 						'FeedView',
-						MetaFeedList[0]);
+						0);
 			});
 
 });
