@@ -28,12 +28,11 @@ describe(
 
 			it("should populate the appropriate fields upon construction",
 					function() {
-						expect(feed.feedTitle).toEqual(feedTitle);
-						expect(feed.feedURL).toEqual(feedURL);
+						expect(feed.m_title).toEqual(feedTitle);
+						expect(feed.m_url).toEqual(feedURL);
 					});
-
-			it("should have a working feed title getter", function() {
-				expect(feed.get_feed_title()).toEqual(feed.feedTitle);
+			it("should have a getter for the feed title", function() {
+				expect(feed.get_title()).toEqual(feed.m_title);
 			});
 
 			describe(
@@ -47,7 +46,7 @@ describe(
 							feed.update();
 
 							expect(Ajax.Request).toHaveBeenCalledWith(
-									feed.feedURL, jasmine.any(Object));
+									feed.m_url, jasmine.any(Object));
 						});
 
 						it('calls the failure callback upon request failure',

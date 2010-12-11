@@ -20,10 +20,10 @@
  *            feed to list
  */
 function FeedViewAssistant(feed_index) {
-	this.feed = MetaFeedList[feed_index];
+	this.m_curr_index = feed_index;
 	
 	this.list_widget_model = {
-		items : this.feed.list
+		items : this.get_stories()
 	};
 	this.app_menu_model = {
 		items : [ {
@@ -48,7 +48,7 @@ function FeedViewAssistant(feed_index) {
 				command : 'previous_feed'
 			}, {
 				width : 200,
-				label : this.feed.feedTitle
+				label : this.get_feed().get_title()
 			}, {
 				icon : 'forward',
 				command : 'next_feed'
@@ -113,7 +113,7 @@ FeedViewAssistant.prototype.cleanup = function(event) {
  * Tell the feed to update itself from its URL
  */
 FeedViewAssistant.prototype.update_feed = function() {
-	this.feed.update();
+	this.get_feed().update();
 };
 
 /**
@@ -125,7 +125,7 @@ FeedViewAssistant.prototype.update_feed = function() {
 FeedViewAssistant.prototype.considerForNotification = function(
 		notification_message) {
 	if (notification_message.updating === false) {
-		this.list_widget_model.items = this.feed.list;
+		this.list_widget_model.items = this.get_stories();
 		this.controller.modelChanged(this.list_widget_model, this);
 	}
 	return undefined;
@@ -141,7 +141,7 @@ FeedViewAssistant.prototype.handleCommand = function(event) {
 	if (event.type === Mojo.Event.command) {
 		switch (event.command) {
 		case 'refresh_feed':
-			this.feed.update();
+			this.update_feed();
 			break;
 		case 'launch_unit_tests':
 			this.controller.stageController
@@ -149,6 +149,9 @@ FeedViewAssistant.prototype.handleCommand = function(event) {
 						name : 'test',
 						sceneTemplate : '../../plugins/jasmine-webos/app/views/test/test-scene'
 					});
+			break;
+		case 'next_feed':
+			this.next_feed();
 			break;
 		}
 	}
@@ -163,4 +166,37 @@ FeedViewAssistant.prototype.handleCommand = function(event) {
 FeedViewAssistant.prototype.display_story = function(event) {
 	this.controller.stageController.pushScene("StoryView", event.item.title,
 			event.item.story);
+};
+
+/**
+ * Switch to the next MetaFilter feed and get updates
+ */
+FeedViewAssistant.prototype.next_feed = function() {
+	this.m_curr_index = MetaFeedList.next_index(this.m_curr_index);
+	
+	this.update_feed();
+	this.update_view_title();
+};
+
+/**
+ * Get the current feed
+ * @returns the current feed
+ * @type MetaFeed
+ */
+FeedViewAssistant.prototype.get_feed = function() {
+	return MetaFeedList[this.m_curr_index];
+};
+
+/**
+ * Return list of stories from current feede
+ * @returns stories from current feed
+ * @type Array(MetaFeed)
+ */
+FeedViewAssistant.prototype.get_stories = function() {
+	return this.get_feed().m_list;
+};
+
+FeedViewAssistant.prototype.update_view_title = function() {
+	this.view_menu_model.items[0].items[1].label = this.get_feed().get_title();
+	this.controller.modelChanged(this.view_menu_model, this);
 };

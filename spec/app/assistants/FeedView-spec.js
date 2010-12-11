@@ -30,7 +30,7 @@ describe("Feed View", function(){
             hasNoWidgets: true,
             itemTemplate: "FeedView/story_list"
         }, {
-            items: assistant.feed.list
+            items: assistant.get_stories()
         });
     });
     
@@ -39,7 +39,7 @@ describe("Feed View", function(){
 		
 		expect(assistant.view_menu_model.items[0].items).toContain({
 			width: 200,
-			label: assistant.feed.feedTitle
+			label: assistant.get_feed().get_title()
 		});
 		expect(assistant.view_menu_model.items[0].items).toContain({
 			icon: 'back',
@@ -83,11 +83,11 @@ describe("Feed View", function(){
     describe('.update_feed', function(){
     
         it('should update the feed', function(){
-            spyOn(assistant.feed, 'update');
+            spyOn(assistant.get_feed(), 'update');
             
             assistant.update_feed();
             
-            expect(assistant.feed.update.callCount).toEqual(1);
+            expect(assistant.get_feed().update.callCount).toEqual(1);
         });
         
     });
@@ -104,14 +104,14 @@ describe("Feed View", function(){
         expect(assistant.controller.setupWidget).toHaveBeenCalledWith(Mojo.Menu.commandMenu, jasmine.any(Object),assistant.command_menu_model);
     });
 	it('should update the displayed feed when the refresh button is pressed', function() {
-		spyOn(assistant.feed, 'update');
+		spyOn(assistant, 'update_feed');
 		
 		assistant.handleCommand({
 			type: Mojo.Event.command,
 			command: 'refresh_feed'
 		});
 				
-		expect(assistant.feed.update.callCount).toEqual(1);
+		expect(assistant.update_feed.callCount).toEqual(1);
 	});
 	it('should run unit tests when requested', function() {
 		spyOn(assistant.controller.stageController, 'pushScene');
@@ -138,7 +138,7 @@ describe("Feed View", function(){
 		var TEST_TITLE = "Test Entry";
 		var TEST_DESCRIPTION = "This is a Test Entry";
 		var TEST_URL = "http://www.test.com";
-		assistant.feed.list[0] = new MetaEntry(TEST_TITLE, TEST_DESCRIPTION, TEST_URL);
+		assistant.get_stories()[0] = new MetaEntry(TEST_TITLE, TEST_DESCRIPTION, TEST_URL);
 		
 		spyOn(assistant.controller.stageController, 'pushScene');
 		spyOn(assistant.controller, 'listen');
@@ -148,12 +148,55 @@ describe("Feed View", function(){
 		expect(assistant.controller.listen).toHaveBeenCalledWith('story_list', Mojo.Event.listTap, assistant.display_story_handler);
 		
 		assistant.display_story({
-			item: assistant.feed.list[0]
+			item: assistant.get_stories()[0]
 		});
-		expect(assistant.controller.stageController.pushScene).toHaveBeenCalledWith("StoryView", assistant.feed.list[0].title, assistant.feed.list[0].story);
+		expect(assistant.controller.stageController.pushScene).toHaveBeenCalledWith("StoryView", assistant.get_stories()[0].title, assistant.get_stories()[0].story);
 		
 		assistant.cleanup();
 		expect(assistant.controller.stopListening).toHaveBeenCalledWith("story_list", Mojo.Event.listTap, assistant.display_story_handler);
+	});
+		
+	describe('.next_feed', function() {
+		beforeEach(function() {
+			assistant.setup();
+		});
+		
+		it('should be assigned to the appropriate view_menu command', function() {
+			spyOn(assistant, 'next_feed');
+			
+			assistant.handleCommand({
+				type: Mojo.Event.command,
+				command: 'next_feed'		
+			});
+			expect(assistant.next_feed.callCount).toEqual(1);
+		});
+		it('should select the next feed', function() {			
+			var old_index = assistant.m_curr_index;
+			
+			assistant.next_feed();
+			
+			expect(old_index).toEqual(MetaFeedList.prev_index(assistant.m_curr_index));
+		});
+		it('should update the newly selected feed', function() {
+			spyOn(assistant, 'update_feed');
+			expect(assistant.update_feed).not.toHaveBeenCalled();
+			
+			assistant.next_feed();
+			
+			expect(assistant.update_feed.callCount).toEqual(1);
+		});
+		it('should update the view menu title element', function() { 
+			var title_model = assistant.view_menu_model.items[0].items[1];
+			var old_feed_title = title_model.label;
+			
+			spyOn(assistant, 'update_view_title').andCallThrough();
+			
+			assistant.next_feed();
+			
+			expect(title_model.label).not.toEqual(old_feed_title);
+			expect(assistant.update_view_title).toHaveBeenCalled();
+			expect(title_model.label).toEqual(MetaFeedList[assistant.m_curr_index].get_title());
+		});
 	});
 });
 	
