@@ -153,6 +153,9 @@ FeedViewAssistant.prototype.handleCommand = function(event) {
 		case 'next_feed':
 			this.next_feed();
 			break;
+		case 'previous_feed':
+			this.previous_feed();
+			break;
 		}
 	}
 };
@@ -173,6 +176,16 @@ FeedViewAssistant.prototype.display_story = function(event) {
  */
 FeedViewAssistant.prototype.next_feed = function() {
 	this.m_curr_index = MetaFeedList.next_index(this.m_curr_index);
+	
+	this.update_feed();
+	this.update_view_title();
+};
+
+/**
+ * Switch to the next MetaFilter feed and get updates
+ */
+FeedViewAssistant.prototype.previous_feed = function() {
+	this.m_curr_index = MetaFeedList.previous_index(this.m_curr_index);
 	
 	this.update_feed();
 	this.update_view_title();

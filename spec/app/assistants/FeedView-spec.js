@@ -175,7 +175,7 @@ describe("Feed View", function(){
 			
 			assistant.next_feed();
 			
-			expect(old_index).toEqual(MetaFeedList.prev_index(assistant.m_curr_index));
+			expect(old_index).toEqual(MetaFeedList.previous_index(assistant.m_curr_index));
 		});
 		it('should update the newly selected feed', function() {
 			spyOn(assistant, 'update_feed');
@@ -192,6 +192,49 @@ describe("Feed View", function(){
 			spyOn(assistant, 'update_view_title').andCallThrough();
 			
 			assistant.next_feed();
+			
+			expect(title_model.label).not.toEqual(old_feed_title);
+			expect(assistant.update_view_title).toHaveBeenCalled();
+			expect(title_model.label).toEqual(MetaFeedList[assistant.m_curr_index].get_title());
+		});
+	});
+	
+	describe('.previous_feed', function() {
+		beforeEach(function() {
+			assistant.setup();
+		});
+		
+		it('should be assigned to the appropriate view_menu command', function() {
+			spyOn(assistant, 'previous_feed');
+			
+			assistant.handleCommand({
+				type: Mojo.Event.command,
+				command: 'previous_feed'		
+			});
+			expect(assistant.previous_feed.callCount).toEqual(1);
+		});
+		it('should select the previous feed', function() {			
+			var old_index = assistant.m_curr_index;
+			
+			assistant.previous_feed();
+			
+			expect(old_index).toEqual(MetaFeedList.next_index(assistant.m_curr_index));
+		});
+		it('should update the newly selected feed', function() {
+			spyOn(assistant, 'update_feed');
+			expect(assistant.update_feed).not.toHaveBeenCalled();
+			
+			assistant.previous_feed();
+			
+			expect(assistant.update_feed.callCount).toEqual(1);
+		});
+		it('should update the view menu title element', function() { 
+			var title_model = assistant.view_menu_model.items[0].items[1];
+			var old_feed_title = title_model.label;
+			
+			spyOn(assistant, 'update_view_title').andCallThrough();
+			
+			assistant.previous_feed();
 			
 			expect(title_model.label).not.toEqual(old_feed_title);
 			expect(assistant.update_view_title).toHaveBeenCalled();

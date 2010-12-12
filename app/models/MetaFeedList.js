@@ -30,7 +30,7 @@ MetaFeedList = [
  * @return Previous feed index
  * @type Number
  */
-MetaFeedList.prev_index = function(curr_index) {
+MetaFeedList.previous_index = function(curr_index) {
 	var new_index = (curr_index - 1) % MetaFeedList.length;
 	
 	// Fix stupid Javascript's bug of leaving negative numbers
