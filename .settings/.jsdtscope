@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path=""/>
-	<classpathentry kind="lib" path="C:/Program Files (x86)/Palm/SDK/share/refcode/webos-framework/347/builtins/prototypebuiltin.js"/>
 	<classpathentry kind="con" path="org.eclipse.wst.jsdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="con" path="org.eclipse.wst.jsdt.launching.baseBrowserLibrary"/>
 	<classpathentry kind="con" path="org.eclipse.wst.jsdt.launching.WebProject">
@@ -9,5 +8,6 @@
 			<attribute name="hide" value="true"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="con" path="org.eclipse.wst.jsdt.USER_LIBRARY/Palm Mojo"/>
 	<classpathentry kind="output" path=""/>
 </classpath>
