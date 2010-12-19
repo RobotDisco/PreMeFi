@@ -30,7 +30,7 @@ function MetaEntry(title, story, url) {
 	/** A HTML-free truncated teaser of the story body */
 	this.teaser = "";
 	/** This entry is unread */
-	this.m_unread = false;
+	this.m_unread = true;
 
 	// Create a HTML-free teaser
 	var tmp = document.createElement("DIV");
@@ -38,16 +38,3 @@ function MetaEntry(title, story, url) {
 	this.teaser = tmp.textContent;
 	delete tmp; // Explicitly delete, tmp is not a private variable
 }
-
-/**
- * Spit out the CSS output determined by an entry's unread status
- * @return the appropriate CSS classname
- * @type {String} 
- */
-MetaEntry.prototype.unread_css = function() {
-	if (this.m_unread == true) {
-		return "unread";
-	} else {
-		return "";
-	}
-};

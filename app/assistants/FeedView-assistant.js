@@ -25,6 +25,13 @@ function FeedViewAssistant(feed_index) {
 	this.list_widget_model = {
 		items : this.get_stories()
 	};
+	this.list_widget_attributes = {
+		hasNoWidgets : true,
+		itemTemplate : "FeedView/story_list",
+		formatters: {
+			m_unread: this.unread_css
+		}
+	};
 	this.app_menu_model = {
 		items : [ {
 			label : "Unit Tests...",
@@ -64,10 +71,7 @@ FeedViewAssistant.prototype.setup = function() {
 	this.update_feed();
 
 	/* Setup widgets */
-	this.controller.setupWidget('story_list', {
-		hasNoWidgets : true,
-		itemTemplate : "FeedView/story_list"
-	}, this.list_widget_model);
+	this.controller.setupWidget('story_list', this.list_widget_attributes, this.list_widget_model);
 	this.controller.setupWidget(Mojo.Menu.appMenu, {}, this.app_menu_model);
 	this.controller.setupWidget(Mojo.Menu.commandMenu, {},
 			this.command_menu_model);
@@ -212,4 +216,19 @@ FeedViewAssistant.prototype.get_stories = function() {
 FeedViewAssistant.prototype.update_view_title = function() {
 	this.view_menu_model.items[0].items[1].label = this.get_feed().get_title();
 	this.controller.modelChanged(this.view_menu_model, this);
+};
+
+/**
+ * Spit out the CSS output determined by an entry's unread status
+ * @param propertyValue 
+ * @param entry entry being displayed in list row
+ * @return the appropriate CSS classname
+ * @type {String} 
+ */
+FeedViewAssistant.prototype.unread_css = function(m_unread, entry) {
+	if (entry.m_unread == true) {
+		return "unread";
+	} else {
+		return "";
+	}
 };

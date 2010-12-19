@@ -38,11 +38,4 @@ describe(
 						expect(entry.teaser).toEqual("This is a test entry.");
 					}
 			);
-			it('should output a CSS style iff the entry is unread', function() {
-				entry.m_unread = true;
-				expect(entry.unread_css()).toEqual("unread");
-				
-				entry.m_unread = false;
-				expect(entry.unread_css()).toEqual("");
-			});
 		});

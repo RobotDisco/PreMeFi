@@ -26,12 +26,9 @@ describe("Feed View", function(){
         
         assistant.setup();
         
-        expect(assistant.controller.setupWidget).toHaveBeenCalledWith('story_list', {
-            hasNoWidgets: true,
-            itemTemplate: "FeedView/story_list"
-        }, {
-            items: assistant.get_stories()
-        });
+        expect(assistant.controller.setupWidget).toHaveBeenCalledWith('story_list', assistant.list_widget_attributes, assistant.list_widget_model);
+        expect(assistant.list_widget_model.items).toEqual(assistant.get_stories());
+        expect(assistant.list_widget_attributes.itemTemplate).toEqual("FeedView/story_list");
     });
     
     it('should set the view menu on startup', function(){
@@ -239,6 +236,20 @@ describe("Feed View", function(){
 			expect(title_model.label).not.toEqual(old_feed_title);
 			expect(assistant.update_view_title).toHaveBeenCalled();
 			expect(title_model.label).toEqual(MetaFeedList[assistant.m_curr_index].get_title());
+		});
+	});
+	describe('bolding new stories', function() {
+		it('should output a CSS style iff the entry is unread', function() {			
+			var entry = {}; // stub MetaEntry
+			
+			entry.m_unread = true;
+			expect(assistant.unread_css("", entry)).toEqual("unread");
+			
+			entry.m_unread = false;
+			expect(assistant.unread_css("", entry)).toEqual("");
+		});
+		it("should use MetaEntry's unread_css function to bold unread stories in the list", function() {
+			expect(assistant.list_widget_attributes.formatters.m_unread).toEqual(assistant.unread_css);
 		});
 	});
 });
