@@ -131,28 +131,48 @@ describe("Feed View", function(){
     		sceneTemplate: '../../plugins/jasmine-webos/app/views/test/test-scene'
   		});
 	});
-	it('should launch a story when an item is pressed', function() {
-		var TEST_TITLE = "Test Entry";
-		var TEST_DESCRIPTION = "This is a Test Entry";
-		var TEST_URL = "http://www.test.com";
-		assistant.get_stories()[0] = new MetaEntry(TEST_TITLE, TEST_DESCRIPTION, TEST_URL);
-		
-		spyOn(assistant.controller.stageController, 'pushScene');
-		spyOn(assistant.controller, 'listen');
-		spyOn(assistant.controller, 'stopListening');
-		
-		assistant.setup();
-		expect(assistant.controller.listen).toHaveBeenCalledWith('story_list', Mojo.Event.listTap, assistant.display_story_handler);
-		
-		assistant.display_story({
-			item: assistant.get_stories()[0]
+	
+	describe('tapping a story item', function() {
+		it('should launch a story when an item is pressed', function() {
+			var TEST_TITLE = "Test Entry";
+			var TEST_DESCRIPTION = "This is a Test Entry";
+			var TEST_URL = "http://www.test.com";
+			assistant.get_stories()[0] = new MetaEntry(TEST_TITLE, TEST_DESCRIPTION, TEST_URL);
+			
+			spyOn(assistant.controller.stageController, 'pushScene');
+			spyOn(assistant.controller, 'listen');
+			spyOn(assistant.controller, 'stopListening');
+			
+			assistant.setup();
+			expect(assistant.controller.listen).toHaveBeenCalledWith('story_list', Mojo.Event.listTap, assistant.display_story_handler);
+			
+			assistant.display_story({
+				item: assistant.get_stories()[0]
+			});
+			expect(assistant.controller.stageController.pushScene).toHaveBeenCalledWith("StoryView", assistant.get_stories()[0].title, assistant.get_stories()[0].story);
+			
+			assistant.cleanup();
+			expect(assistant.controller.stopListening).toHaveBeenCalledWith("story_list", Mojo.Event.listTap, assistant.display_story_handler);
 		});
-		expect(assistant.controller.stageController.pushScene).toHaveBeenCalledWith("StoryView", assistant.get_stories()[0].title, assistant.get_stories()[0].story);
-		
-		assistant.cleanup();
-		expect(assistant.controller.stopListening).toHaveBeenCalledWith("story_list", Mojo.Event.listTap, assistant.display_story_handler);
+		it('should mark the story as read', function() {
+			var TEST_TITLE = "Test Entry";
+			var TEST_DESCRIPTION = "This is a Test Entry";
+			var TEST_URL = "http://www.test.com";
+			var test_story = new MetaEntry(TEST_TITLE, TEST_DESCRIPTION, TEST_URL);
+			
+			spyOn(assistant.controller, 'modelChanged');
+			
+			expect(test_story.m_unread).toBeTruthy();
+			
+			assistant.display_story({
+				item: test_story
+			});
+			
+			expect(test_story.m_unread).toBeFalsy();
+			expect(assistant.controller.modelChanged).toHaveBeenCalledWith(assistant.list_widget_model, assistant);
+		});	
 	});
-		
+	
 	describe('.next_feed', function() {
 		beforeEach(function() {
 			assistant.setup();

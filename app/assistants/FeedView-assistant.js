@@ -173,6 +173,8 @@ FeedViewAssistant.prototype.handleCommand = function(event) {
 FeedViewAssistant.prototype.display_story = function(event) {
 	this.controller.stageController.pushScene("StoryView", event.item.title,
 			event.item.story);
+	event.item.m_unread = false;
+	this.controller.modelChanged(this.list_widget_model, this);
 };
 
 /**
