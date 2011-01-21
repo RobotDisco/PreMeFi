@@ -27,7 +27,9 @@ function MetaFeed(feedTitle, feedURL) {
 	this.m_title = feedTitle;
 	/** Feed URL */
 	this.m_url = feedURL;
-	/** List of stories in feed */
+	/** List of stories in feed. Note that stories should be stored
+	 *  in reverse chronological order.
+	 */
 	this.m_list = [];
 }
 
@@ -71,7 +73,9 @@ MetaFeed.prototype.updateSuccess = function(transport) {
 	if (xml_text.getElementsByTagName("rss").length === 0) {
 		Mojo.Log.warn("We did not get a valid RSS feed!");
 	} else {
-		this.m_list = FeedProcessor.processRSS(xml_text);
+		var new_list = FeedProcessor.processRSS(xml_text);
+		this.merge(new_list);
+		//this.m_list = FeedProcessor.processRSS(xml_text);
 	}
 	Mojo.Controller.getAppController().sendToNotificationChain({
 		updating : false
@@ -85,4 +89,29 @@ MetaFeed.prototype.updateSuccess = function(transport) {
  */
 MetaFeed.prototype.get_title = function() {
 	return this.m_title;
+};
+
+/**
+ * Merge processed RSS list into feed object.
+ * @param {MetaFeed} new_list List to merge into feed.
+ */
+MetaFeed.prototype.merge = function(new_list) {
+	// The lists are in reverse chronological order, but we want
+	// to iterate such that earlier entries are added before later
+	// entries (if they aren't already on the feed)
+	new_list.reverse();
+	
+	for(var i = 0; i < new_list.length; i++) {
+		var new_feed = new_list[i];
+		var matched = false;
+		for(var j = 0; j < this.m_list.length; j++) {
+			var old_feed = this.m_list[j];
+			if(old_feed.m_guid === new_feed.m_guid) {
+				matched = true;
+			}
+		}
+		if(matched === false) {
+			this.m_list.unshift(new_list[i]);
+		}
+	}
 };

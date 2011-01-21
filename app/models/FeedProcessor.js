@@ -30,8 +30,9 @@ FeedProcessor.processItem = function(input) {
 	var title = input.getElementsByTagName('title')[0].textContent;
 	var story = input.getElementsByTagName('description')[0].textContent;
 	var url = input.getElementsByTagName('link')[0].textContent;
+	var guid = input.getElementsByTagName('guid')[0].textContent;
 
-	return new MetaEntry(title, story, url);
+	return new MetaEntry(title, story, url, guid);
 };
 
 /**

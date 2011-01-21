@@ -126,5 +126,39 @@ describe(
 												updating : false
 											});
 								});
+						it('should not re-bold an already-read entry', function() {
+							var TEST_TITLE = "A Test Feed";
+							var TEST_DESCRIPTION = "This is a Test Feed";
+							var TEST_LINK = "This is a Test Link";
+							
+							var NUM_ENTRIES = 3;
+							
+							//Initial state, unread feeds
+							feed.update();
+							request = AjaxRequests.activeRequest();
+							request.response(TestFeedXML.generateRSS(TEST_TITLE, TEST_DESCRIPTION, TEST_LINK, NUM_ENTRIES));
+							for(var i = 0; i < feed.m_list.length; i++) {
+								expect(feed.m_list[i].m_unread).toEqual(true);
+							}
+							for(var i = 0; i < feed.m_list.length; i++) {
+								Mojo.Log.info("old: ", feed.m_list[i].title, ", unread: ", feed.m_list[i].m_unread);
+							}
+							
+							// "Read" an entry
+							feed.m_list[0].m_unread = false;
+							
+							// Update feeds, add new entry
+							feed.update();
+							request = AjaxRequests.activeRequest();
+							request.response(TestFeedXML.generateRSS(TEST_TITLE, TEST_DESCRIPTION, TEST_LINK, NUM_ENTRIES + 1));								
+							
+							for(var i = 0; i < feed.m_list.length; i++) {
+								Mojo.Log.info("new: ", feed.m_list[i].title, ", unread: ", feed.m_list[i].m_unread);
+							}
+							
+							// New feed should be unread, read feed should remain read
+							expect(feed.m_list[0].m_unread).toEqual(true); // new entry
+							expect(feed.m_list[1].m_unread).toEqual(false); // old 0th entry
+						});
 					});
 		});

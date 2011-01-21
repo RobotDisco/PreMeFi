@@ -20,15 +20,16 @@ describe('Feed Processor', function() {
 		var TEST_TITLE = 'Test Title';
 		var TEST_DESCRIPTION = 'Lorum Ipsum';
 		var TEST_URL = 'http://www.blort.com';
+		var TEST_GUID = "0";
 
 		var story_constructor = spyOn(window, 'MetaEntry').andCallThrough();
 
 		var testXML = TestFeedXML.generateItem(TEST_TITLE, TEST_DESCRIPTION,
-				TEST_URL);
+				TEST_URL, TEST_GUID);
 		var testStory = FeedProcessor.processItem(testXML);
 
 		expect(story_constructor.callCount).toEqual(1);
-		expect(testStory).toEqual(new MetaEntry(TEST_TITLE, TEST_DESCRIPTION, TEST_URL));
+		expect(testStory).toEqual(new MetaEntry(TEST_TITLE, TEST_DESCRIPTION, TEST_URL, TEST_GUID));
 		});
 
 	it('should turn an <rss> entry into a list of stories', function() {

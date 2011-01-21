@@ -25,7 +25,7 @@ var TestFeedXML = {};
  * @returns XML DOM node for an <item> object
  * @type {Element}
  */
-TestFeedXML.generateItem = function(title, story, link) {
+TestFeedXML.generateItem = function(title, story, link, guid) {
 	var item = document.createElement('item');
 
 	var title_element = document.createElement('title');
@@ -36,10 +36,15 @@ TestFeedXML.generateItem = function(title, story, link) {
 
 	var link_element = document.createElement('link');
 	link_element.appendChild(document.createTextNode(link));
+	
+	var guid_element = document.createElement('guid');
+	guid_element.setAttribute('isPermaLink', 'true');
+	guid_element.appendChild(document.createTextNode(guid));
 
 	item.appendChild(title_element);
 	item.appendChild(story_element);
 	item.appendChild(link_element);
+	item.appendChild(guid_element);
 
 	return item;
 };
@@ -55,30 +60,44 @@ TestFeedXML.generateItem = function(title, story, link) {
  * @requires TestFeedXML.generateItem to generate DOM nodes for individual items 
  */
 TestFeedXML.generateFeed = function(title, description, link, num_entries) {
-	var rss_entry = document.createElement('rss');
+	var feed_xml = document.implementation.createDocument(null,"rss",null);
+	var rss_entry = feed_xml.documentElement;
+	rss_entry.setAttribute('xmlns:dc','http://purl.org/dc/elements/1.1/');
+	rss_entry.setAttribute('xmlns:admin', 'http://webns.net/mvcb/');
+	rss_entry.setAttribute('xmlns:content', 'http://purl.org/rss/1.0/modules/content/');
+	rss_entry.setAttribute('xmlns:rdf', 'http://www.w3.org/1999/02/22-rdf-syntax-ns#');
+	rss_entry.setAttribute('xmlns:wfw', 'http://wellformedweb.org/CommentAPI/');
+	rss_entry.setAttribute('xmlns:feedburner', 'http://rssnamespace.org/feedburner/ext/1.0');
 	rss_entry.setAttribute('version', '2.0');
 
-	var channel_entry = document.createElement('channel');
+	var channel_entry = feed_xml.createElement('channel');
 
-	var title_entry = document.createElement('title');
-	title_entry.appendChild(document.createTextNode(title));
+	var title_entry = feed_xml.createElement('title');
+	title_entry.appendChild(feed_xml.createTextNode(title));
 	channel_entry.appendChild(title_entry);
 
-	var description_entry = document.createElement('description');
-	description_entry.appendChild(document.createTextNode(description));
+	var description_entry = feed_xml.createElement('description');
+	description_entry.appendChild(feed_xml.createTextNode(description));
 	channel_entry.appendChild(description_entry);
 
-	var link_entry = document.createElement('link');
-	link_entry.appendChild(document.createTextNode(link));
+	var link_entry = feed_xml.createElement('link');
+	link_entry.appendChild(feed_xml.createTextNode(link));
 	channel_entry.appendChild(link_entry);
 
-	for ( var i = 0; i < num_entries; ++i) {
-		var item_entry = TestFeedXML.generateItem("test story " + num_entries,
-				"This is test story " + num_entries,
-				'http://www.metafilter.com/test' + num_entries + '.html');
+	// Have to create in reverse order because
+	// feed items are listed in reverse chronological order
+	for ( var i = num_entries; i > 0; --i) {
+		var item_entry = TestFeedXML.generateItem("test story " + i,
+				"This is test story " + i,
+				'http://www.metafilter.com/test' + i + '.html',
+				i);		
 		channel_entry.appendChild(item_entry);
 	}
 
 	rss_entry.appendChild(channel_entry);
-	return rss_entry;
+	return feed_xml;
+};
+
+TestFeedXML.generateRSS = function(title, description, link, num_entries) {
+	return new XMLSerializer().serializeToString(TestFeedXML.generateFeed(title, description, link, num_entries));
 };

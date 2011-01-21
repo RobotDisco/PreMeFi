@@ -20,7 +20,7 @@
  * @param {String} story Story body
  * @param {String} url Story URL
  */
-function MetaEntry(title, story, url) {
+function MetaEntry(title, story, url, guid) {
 	/** Story title */
 	this.title = title;
 	/** Story body */
@@ -31,6 +31,8 @@ function MetaEntry(title, story, url) {
 	this.teaser = "";
 	/** This entry is unread */
 	this.m_unread = true;
+	/** Story GUID */
+	this.m_guid = guid;
 
 	// Create a HTML-free teaser
 	var tmp = document.createElement("DIV");

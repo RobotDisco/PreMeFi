@@ -20,18 +20,14 @@ describe(
 			var TEST_TITLE = "Test Story";
 			var TEST_STORY = "This is a <a href='http://www.test.com'>test</a> entry.";
 			var TEST_URL = "http://www.metafilter.com/story.html";
+			var TEST_GUID = "0";
 			
 			var entry;
 			
 			beforeEach(function() {
-				entry = new MetaEntry(TEST_TITLE, TEST_STORY, TEST_URL);
+				entry = new MetaEntry(TEST_TITLE, TEST_STORY, TEST_URL, TEST_GUID);
 			});
 			
-			it('should construct properly', function() {
-				expect(entry.title).toEqual(TEST_TITLE);
-				expect(entry.story).toEqual(TEST_STORY);
-				expect(entry.url).toEqual(TEST_URL);
-			});
 			it(
 					'should produce an HTML-free version of the text as a teaser',
 					function() {

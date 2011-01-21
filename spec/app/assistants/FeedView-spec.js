@@ -78,7 +78,6 @@ describe("Feed View", function(){
     });
     
     describe('.update_feed', function(){
-    
         it('should update the feed', function(){
             spyOn(assistant.get_feed(), 'update');
             
@@ -86,8 +85,8 @@ describe("Feed View", function(){
             
             expect(assistant.get_feed().update.callCount).toEqual(1);
         });
-        
     });
+    
     it('should set up a command menu with a refresh button', function(){
         spyOn(assistant.controller, 'setupWidget');
         assistant.setup();
