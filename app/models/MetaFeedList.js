@@ -14,7 +14,33 @@
 //  You should have received a copy of the GNU General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-MetaFeedList = [
+//TODO Rename this to MetaFeedList when I can refactor it
+/**
+ * @constructor
+ * 
+ * Don't create this object directly, we're only interested in its prototype
+ * Use makeMetaFeedList(...) instead
+ */
+function MyMetaFeedList() {
+	MyMetaFeedList.prototype = new Array;
+};
+
+/**
+ * Create a MetafeedListObject. Needed since we do some
+ * javascript hacking to subclass array objects
+ * @param {[MetaFeed]} feed_list List of Metafilter Feeds to track.
+ * @returns {MyMetaFeedList}
+ */
+function makeMetaFeedList(feed_list) {
+	var arr = [];
+	arr.push.apply(arr, feed_list);
+	arr.__proto__ = MyMetaFeedList.prototype;
+	
+	return arr;
+};
+
+//TODO move somewhere else, as this is a app-specific global now.
+MetaFeedList = makeMetaFeedList([
 	new MetaFeed("MetaFilter", "http://feeds.feedburner.com/Metafilter"),
 	new MetaFeed("Ask MeFi", "http://feeds.feedburner.com/AskMetafilter"),
 	new MetaFeed("MeFi Projects", "http://feeds.feedburner.com/mefi/Projects"),
@@ -22,7 +48,18 @@ MetaFeedList = [
 	new MetaFeed("MeFi Jobs", "http://feeds.feedburner.com/MeFi/Jobs"),
 	new MetaFeed("MeFi IRL", "http://feeds.feedburner.com/MeFiIRL"),
 	new MetaFeed("MetaTalk", "http://feeds.feedburner.com/MeFi/MetaTalk")
-];
+]);
+
+/**
+ * Convert a JSON structure into a MetaFeedList
+ * @param json JSON representation of the feedlist
+ * @returns {MetaFeedList} A MetaFeedList
+ */
+MyMetaFeedList.fromJSON = function (json) {
+	var feedarray = json.map(MetaFeed.fromJSON);
+	
+	return makeMetaFeedList(feedarray);
+};
 
 /**
  * Give us the previous feed in this circular feed list
@@ -30,13 +67,13 @@ MetaFeedList = [
  * @return Previous feed index
  * @type Number
  */
-MetaFeedList.previous_index = function(curr_index) {
-	var new_index = (curr_index - 1) % MetaFeedList.length;
+MyMetaFeedList.prototype.previous_index = function(curr_index) {
+	var new_index = (curr_index - 1) % this.length;
 	
 	// Fix stupid Javascript's bug of leaving negative numbers
 	// with negative modulos
 	if(new_index < 0) {
-		new_index += MetaFeedList.length;
+		new_index += this.length;
 	}
 	return new_index;
 };
@@ -47,6 +84,27 @@ MetaFeedList.previous_index = function(curr_index) {
  * @return Next feed index
  * @type Number
  */
-MetaFeedList.next_index = function(curr_index) {
-	return (curr_index + 1) % MetaFeedList.length;
+MyMetaFeedList.prototype.next_index = function(curr_index) {
+	return (curr_index + 1) % this.length;
+};
+
+/**
+ * Return this MetaFeedList as a JSON-compliant object
+ * @returns {Array}
+ */
+MyMetaFeedList.prototype.toJSONObject = function() {
+	var object = [];
+	for(var i = 0; i < this.length; i++) {
+		object.push(this[i].toJSONObject());
+	}
+	
+	return object;
+};
+
+/**
+ * Return the MetaFeedList as a JSON string
+ * @returns {String}
+ */
+MyMetaFeedList.prototype.toJSON = function() {
+	return Array.toJSON(this.toJSONObject());
 };

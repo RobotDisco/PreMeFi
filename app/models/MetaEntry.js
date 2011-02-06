@@ -40,3 +40,40 @@ function MetaEntry(title, story, url, guid) {
 	this.teaser = tmp.textContent;
 	delete tmp; // Explicitly delete, tmp is not a private variable
 }
+
+/**
+ * Return a MetaEntry object from a JSON string
+ * @param object object from JSON to be evaluated
+ * @returns {MetaEntry}
+ */
+MetaEntry.fromJSON = function(object) {
+	
+	var entry = new MetaEntry(object.title, object.story, object.url, object.guid);
+	entry.m_unread = object.unread;
+	
+	return entry;
+};
+
+/**
+ * Returns a JSON-compliant structure representing this feed
+ * @returns {Object} JSON-compliant object
+ */
+MetaEntry.prototype.toJSONObject = function() {
+	var object = {};
+	
+	object.title = this.title;
+	object.story = this.story;
+	object.url = this.url;
+	object.unread = this.m_unread;
+	object.guid = this.m_guid;
+	
+	return object;
+};
+
+/**
+ * Returns a JSON string representation of this feed
+ * @returns {String} JSON-compliant string
+ */
+MetaEntry.prototype.toJSON = function() {
+	return Object.toJSON(this.toJSONObject());
+};

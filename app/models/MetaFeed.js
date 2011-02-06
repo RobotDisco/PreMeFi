@@ -115,3 +115,44 @@ MetaFeed.prototype.merge = function(new_list) {
 		}
 	}
 };
+
+/**
+ * Create a MetaFeed object from a JSON-compliant structure
+ * @param {Object} JSON-compliant source object
+ * @returns {MetaFeed} The resulting MetaFeed populated with information from the JSON object
+ */
+MetaFeed.fromJSON = function (object) {
+	
+	var feed = new MetaFeed(object.title, object.url);
+	for(var i = 0; i < object.items.length; ++i) {
+		var entry = MetaEntry.fromJSON(object.items[i]);
+		feed.m_list.push(entry);
+	}
+	
+	return feed;
+};
+
+/**
+ * Create a JSON structure from a MetaFeed
+ * @returns {Object} a JSON-structure containing the feed's data
+ */
+MetaFeed.prototype.toJSONObject = function() {
+	var object = {};
+	
+	object.title = this.m_title;
+	object.url = this.m_url;
+	object.items = [];
+	for(var i = 0; i < this.m_list.length; i++) {
+		object.items.push(this.m_list[i].toJSONObject());
+	}
+	
+	return object;
+};
+
+/**
+ * Returns a JSON string from a MetaFeed
+ * @returns {String} A JSON object
+ */
+MetaFeed.prototype.toJSON = function() {
+	return Object.toJSON(this.toJSONObject());
+};

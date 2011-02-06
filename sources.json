@@ -32,6 +32,7 @@
     {"source": "plugins/jasmine-webos/app/lib/jasmine-webos.js"},
     {"source": "spec/app/models/test_input/TestResponses.js"},
     {"source": "spec/app/models/test_input/TestFeedXML.js"},
+	{"source": "spec/app/models/test_input/FeedGenerator.js"},
     {"source": "spec/app/models/MetaFeed-spec.js"},
     {"source": "spec/app/assistants/StoryView-spec.js"},
     {"source": "spec/app/assistants/FeedView-spec.js"},
