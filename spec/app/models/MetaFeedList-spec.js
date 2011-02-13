@@ -26,33 +26,26 @@ describe('MetaFeedList', function() {
 	});
 	
 	describe('saving/loading', function() {
-
-		xit('should be able to load and save all feed content to the depot', function() {
-			var depot = new Mojo.Depot('test_metastore');
-			var test_feeds1 = makeMetaFeedList([
-					 new MetaFeed('test feed 1', 'http://test1'),
-			         new MetaFeed('test feed 2', 'http://test2')
-					 ]);
-			test_feeds1.save(depot);
+		it('should be able to save all feed content to the depot', function() {
+			var depot_open_fail = jasmine.createSpy('Depot Open Failure Callback');
 			
-			var test_feeds2 = loadMetaFeedList(depot);
+			var depot = new Mojo.Depot({
+				name: "unit_test_db",
+				replace: true
+				},
+				function() {},
+				depot_open_fail);
+			expect(depot_open_fail).not.toHaveBeenCalled();
 			
-			// FeedLists should be the same length
-			expect(test_feeds1.length).toEqual(test_feeds2.length);
-			for(var i = 0; i < test_feeds1.length; ++i) {
-				//test name
-				//test description
-				//test url
-				//test feed length
-				for(var j = 0; j < test_feeds1[i].length; ++j) {
-					//test entry title
-					//test entry url
-					//test entry body
-					//test entry teaser
-					//test entry m_unread
-					//test entry m_guid
-				}
-			}
+			var test_feeds = makeMetaFeedList([
+			    FeedGenerator.generate_feed(3),
+				FeedGenerator.generate_feed(5),
+				FeedGenerator.generate_feed(2)
+				]);
+			spyOn(test_feeds, 'toJSONObject');
+			
+			test_feeds.save(depot);
+			expect(test_feeds.toJSONObject).toHaveBeenCalled();
 		});	
 		it('should be able to populate a MetaFeedList from a JSON object', function() {
 			var json_list = [

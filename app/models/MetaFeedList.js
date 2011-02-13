@@ -108,3 +108,16 @@ MyMetaFeedList.prototype.toJSONObject = function() {
 MyMetaFeedList.prototype.toJSON = function() {
 	return Array.toJSON(this.toJSONObject());
 };
+
+/**
+ * Save feedlist data to the depot
+ * @param depot Depot to save stuff too
+ */
+MyMetaFeedList.prototype.save = function(depot) {
+	depot.add('feed_list',
+			this.toJSONObject(),
+			function() {},
+			function(reason) {
+				Mojo.Log.error("Failed to save feed data due to depot error " + reason);
+			});
+};
