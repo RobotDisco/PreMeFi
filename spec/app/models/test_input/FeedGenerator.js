@@ -40,7 +40,7 @@ FeedGenerator.generate_json = function(num_entries) {
 		item.unread = true;
 		item.guid = FeedGenerator.feed_guid(i);
 		
-		object.items.shift(item);
+		object.items.unshift(item);
 	}
 	
 	return Object.toJSON(object);
@@ -63,7 +63,7 @@ FeedGenerator.generate_feed = function(num_entries) {
 				FeedGenerator.feed_url(i),
 				FeedGenerator.feed_guid(i));
 		
-		feed.m_list.shift(entry);
+		feed.m_list.unshift(entry);
 	}
 	
 	return feed;

@@ -17,49 +17,22 @@
 //TODO Rename this to MetaFeedList when I can refactor it
 /**
  * @constructor
- * 
- * Don't create this object directly, we're only interested in its prototype
- * Use makeMetaFeedList(...) instead
- */
-function MyMetaFeedList() {
-	MyMetaFeedList.prototype = new Array;
-};
-
-/**
- * Create a MetafeedListObject. Needed since we do some
- * javascript hacking to subclass array objects
  * @param {[MetaFeed]} feed_list List of Metafilter Feeds to track.
  * @returns {MyMetaFeedList}
  */
-function makeMetaFeedList(feed_list) {
+function MyMetaFeedList(feed_list) {
 	var arr = [];
+
 	arr.push.apply(arr, feed_list);
+	// Prototype injection, NOT EMCAScript 3 compliant!
+	// Doing this because simply adding Array into the prototype chain is apparently not enough.
+	// see http://perfectionkills.com/how-ecmascript-5-still-does-not-allow-to-subclass-an-array/#wrappers_prototype_chain_injection
 	arr.__proto__ = MyMetaFeedList.prototype;
-	
+		
 	return arr;
-};
+}
 
-//TODO move somewhere else, as this is a app-specific global now.
-MetaFeedList = makeMetaFeedList([
-	new MetaFeed("MetaFilter", "http://feeds.feedburner.com/Metafilter"),
-	new MetaFeed("Ask MeFi", "http://feeds.feedburner.com/AskMetafilter"),
-	new MetaFeed("MeFi Projects", "http://feeds.feedburner.com/mefi/Projects"),
-	new MetaFeed("MeFi Music", "http://feeds.feedburner.com/mefi/Music"),
-	new MetaFeed("MeFi Jobs", "http://feeds.feedburner.com/MeFi/Jobs"),
-	new MetaFeed("MeFi IRL", "http://feeds.feedburner.com/MeFiIRL"),
-	new MetaFeed("MetaTalk", "http://feeds.feedburner.com/MeFi/MetaTalk")
-]);
-
-/**
- * Convert a JSON structure into a MetaFeedList
- * @param json JSON representation of the feedlist
- * @returns {MetaFeedList} A MetaFeedList
- */
-MyMetaFeedList.fromJSON = function (json) {
-	var feedarray = json.map(MetaFeed.fromJSON);
-	
-	return makeMetaFeedList(feedarray);
-};
+MyMetaFeedList.prototype = new Array;
 
 /**
  * Give us the previous feed in this circular feed list
@@ -112,12 +85,60 @@ MyMetaFeedList.prototype.toJSON = function() {
 /**
  * Save feedlist data to the depot
  * @param depot Depot to save stuff too
+ * @param success_callback (Optional) function to trigger on successful load.
  */
-MyMetaFeedList.prototype.save = function(depot) {
+MyMetaFeedList.prototype.save = function(depot, success_callback) {
+	if(success_callback === null) {
+		success_callback = function() {};
+	}
+
 	depot.add('feed_list',
 			this.toJSONObject(),
-			function() {},
+			success_callback,
 			function(reason) {
 				Mojo.Log.error("Failed to save feed data due to depot error " + reason);
 			});
+};
+
+/**
+ * Load feedlist data from depot
+ * @param depot Depot containing feed data
+ * @param success_callback (Optional) function to trigger on successful load.
+ */
+MyMetaFeedList.prototype.load = function(depot, success_callback) {
+	if(success_callback === null) {
+		success_callback = function() {};
+	}
+	
+	depot.get('feed_list',
+		function(object) {
+			this.length = 0;
+		    this.push.apply(this, MyMetaFeedList.fromJSON(object));
+			success_callback(object);
+		}.bind(this),
+		function(reason) {
+			Mojo.Log.error("Failed to load feed data due to depot error " + reason);
+		});
+};
+
+//TODO move somewhere else, as this is a app-specific global now.
+MetaFeedList = MyMetaFeedList([
+	new MetaFeed("MetaFilter", "http://feeds.feedburner.com/Metafilter"),
+	new MetaFeed("Ask MeFi", "http://feeds.feedburner.com/AskMetafilter"),
+	new MetaFeed("MeFi Projects", "http://feeds.feedburner.com/mefi/Projects"),
+	new MetaFeed("MeFi Music", "http://feeds.feedburner.com/mefi/Music"),
+	new MetaFeed("MeFi Jobs", "http://feeds.feedburner.com/MeFi/Jobs"),
+	new MetaFeed("MeFi IRL", "http://feeds.feedburner.com/MeFiIRL"),
+	new MetaFeed("MetaTalk", "http://feeds.feedburner.com/MeFi/MetaTalk")
+]);
+
+/**
+ * Convert a JSON structure into a MetaFeedList
+ * @param json JSON representation of the feedlist
+ * @returns {MetaFeedList} A MetaFeedList
+ */
+MyMetaFeedList.fromJSON = function (json) {
+	var feedarray = json.map(MetaFeed.fromJSON);
+	
+	return new MyMetaFeedList(feedarray);
 };

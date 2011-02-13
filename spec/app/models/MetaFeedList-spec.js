@@ -26,27 +26,103 @@ describe('MetaFeedList', function() {
 	});
 	
 	describe('saving/loading', function() {
+		var depot;
+		var success_callback;
+		
+		beforeEach(function() {	
+			runs(function() {
+				success_callback = jasmine.createSpy('Depot Open Success Callback');
+				depot = new Mojo.Depot({
+						name: "unit_test_db",
+						replace: true
+					},
+					success_callback,
+					function() {});
+			});
+			
+			waitsFor(function() {
+				return success_callback.callCount > 0;
+			}, "Depot create", 200);
+		});
+		
 		it('should be able to save all feed content to the depot', function() {
-			var depot_open_fail = jasmine.createSpy('Depot Open Failure Callback');
+			var feed_list;
 			
-			var depot = new Mojo.Depot({
-				name: "unit_test_db",
-				replace: true
-				},
-				function() {},
-				depot_open_fail);
-			expect(depot_open_fail).not.toHaveBeenCalled();
-			
-			var test_feeds = makeMetaFeedList([
-			    FeedGenerator.generate_feed(3),
-				FeedGenerator.generate_feed(5),
-				FeedGenerator.generate_feed(2)
+			runs(function() {
+				feed_list = new MyMetaFeedList([
+				    FeedGenerator.generate_feed(3),
+				    FeedGenerator.generate_feed(5),
+				    FeedGenerator.generate_feed(2)
 				]);
-			spyOn(test_feeds, 'toJSONObject');
+				spyOn(feed_list, 'toJSONObject').andCallThrough();
+				spyOn(depot,'add').andCallThrough();
+				success_callback = jasmine.createSpy('Depot add success callback');				
+
+				feed_list.save(depot, success_callback);
+			});
 			
-			test_feeds.save(depot);
-			expect(test_feeds.toJSONObject).toHaveBeenCalled();
-		});	
+			waitsFor(function() {
+				return success_callback.callCount > 0;
+			}, "Depot add", 200);
+			
+			runs(function() {
+				expect(feed_list.toJSONObject).toHaveBeenCalled();
+				expect(depot.add).toHaveBeenCalledWith('feed_list',feed_list.toJSONObject(), jasmine.any(Function), jasmine.any(Function));				
+			});
+		});
+		it('should be able to load all feed content from the depot', function() {
+			var feed_list;
+			var json_to_add;
+			var JSON_AMOUNT1 = 3, JSON_AMOUNT2 = 5, JSON_AMOUNT3 = 2;
+			
+			runs(function() {
+				json_to_add = [
+				               FeedGenerator.generate_json(JSON_AMOUNT1).evalJSON(),
+				               FeedGenerator.generate_json(JSON_AMOUNT2).evalJSON(),
+				               FeedGenerator.generate_json(JSON_AMOUNT3).evalJSON()
+				              ];
+				success_callback = jasmine.createSpy("depot add success callback");
+				depot.add('feed_list', json_to_add, success_callback, function() {});
+			});
+			
+			waitsFor(function() {
+				return success_callback.callCount > 0;
+			}, "Depot add", 200);
+			
+			runs(function() {
+				feed_list = new MyMetaFeedList([]);
+				spyOn(MyMetaFeedList, 'fromJSON').andCallThrough();
+				spyOn(depot, 'get').andCallThrough();
+				success_callback = jasmine.createSpy("depot get success callback");
+					
+     			feed_list.load(depot, success_callback);
+			});	                     			
+				                     							
+			waitsFor(function() {
+				return success_callback.callCount > 0;
+			}, "depot get", 200);
+			
+			runs(function() {
+				expect(depot.get).toHaveBeenCalled();
+				expect(MyMetaFeedList.fromJSON).toHaveBeenCalled();
+				expect(feed_list.length).toEqual(json_to_add.length);
+				expect(feed_list[0].m_list.length).toEqual(JSON_AMOUNT1);
+				expect(feed_list[1].m_list.length).toEqual(JSON_AMOUNT2);
+				expect(feed_list[2].m_list.length).toEqual(JSON_AMOUNT3);
+			});
+		});
+		
+		afterEach(function() {
+			runs(function() {
+				success_callback = jasmine.createSpy('Depot removeAll success callback');
+				depot.removeAll(success_callback, function() {});
+			});
+			waitsFor(function() {
+				return success_callback.callCount > 0;
+			}, "Depot removeAll", 200);
+		});
+	});
+	describe('JSON', function() {
 		it('should be able to populate a MetaFeedList from a JSON object', function() {
 			var json_list = [
 			    FeedGenerator.generate_json(5).evalJSON(),
@@ -76,7 +152,7 @@ describe('MetaFeedList', function() {
 			}
 		});
 		it('should be able to represent itself as a JSON-compliant structure', function() {
-			var feedlist = makeMetaFeedList([
+			var feedlist = new MyMetaFeedList([
 			    FeedGenerator.generate_feed(5),
 			    FeedGenerator.generate_feed(7),
 			    FeedGenerator.generate_feed(4)
