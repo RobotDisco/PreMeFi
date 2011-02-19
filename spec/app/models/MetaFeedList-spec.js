@@ -112,6 +112,32 @@ describe('MetaFeedList', function() {
 			});
 		});
 		
+		it('should restore a default list of feeds if we have no previously stored data', function() {
+			var feed_list;
+			
+			// Note that we haven't pre-populated our depot with anything!
+			
+			runs(function() {
+				feed_list = new MyMetaFeedList([]);
+				spyOn(MyMetaFeedList, 'fromJSON');
+				spyOn(MyMetaFeedList, 'getDefaultList');
+				spyOn(depot, 'get').andCallThrough();
+				success_callback = jasmine.createSpy("depot get success callback");
+					
+     			feed_list.load(depot, success_callback);
+			});	                     			
+				                     							
+			waitsFor(function() {
+				return success_callback.callCount > 0;
+			}, "depot get", 200);
+			
+			runs(function() {
+				expect(depot.get).toHaveBeenCalled();
+				expect(MyMetaFeedList.fromJSON).not.toHaveBeenCalled();
+				expect(MyMetaFeedList.getDefaultList).toHaveBeenCalled();
+			});
+		});
+		
 		afterEach(function() {
 			runs(function() {
 				success_callback = jasmine.createSpy('Depot removeAll success callback');

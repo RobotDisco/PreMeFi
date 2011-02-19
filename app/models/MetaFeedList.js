@@ -101,7 +101,7 @@ MyMetaFeedList.prototype.save = function(depot, success_callback) {
 };
 
 /**
- * Load feedlist data from depot
+ * Load feedlist data from depot (or load a 'default' skeleton list of feeds.
  * @param depot Depot containing feed data
  * @param success_callback (Optional) function to trigger on successful load.
  */
@@ -113,7 +113,13 @@ MyMetaFeedList.prototype.load = function(depot, success_callback) {
 	depot.get('feed_list',
 		function(object) {
 			this.length = 0;
-		    this.push.apply(this, MyMetaFeedList.fromJSON(object));
+
+			if(object === null) {
+				this.push.apply(this, MyMetaFeedList.getDefaultList());
+			} else {
+				this.push.apply(this, MyMetaFeedList.fromJSON(object));
+			}
+
 			success_callback(object);
 		}.bind(this),
 		function(reason) {
@@ -141,4 +147,20 @@ MyMetaFeedList.fromJSON = function (json) {
 	var feedarray = json.map(MetaFeed.fromJSON);
 	
 	return new MyMetaFeedList(feedarray);
+};
+
+/**
+ * Return a default MyMetaFeedList of (empty) MetaFeeds
+ * @returns {MyMetaFeedList}
+ */
+MyMetaFeedList.getDefaultList = function() {
+	return new MyMetaFeedList([
+	    new MetaFeed("MetaFilter", "http://feeds.feedburner.com/Metafilter"),
+	    new MetaFeed("Ask MeFi", "http://feeds.feedburner.com/AskMetafilter"),
+	    new MetaFeed("MeFi Projects", "http://feeds.feedburner.com/mefi/Projects"),
+	    new MetaFeed("MeFi Music", "http://feeds.feedburner.com/mefi/Music"),
+	    new MetaFeed("MeFi Jobs", "http://feeds.feedburner.com/MeFi/Jobs"),
+	    new MetaFeed("MeFi IRL", "http://feeds.feedburner.com/MeFiIRL"),
+	    new MetaFeed("MetaTalk", "http://feeds.feedburner.com/MeFi/MetaTalk")                   
+	]);
 };
