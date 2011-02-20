@@ -113,7 +113,7 @@ MyMetaFeedList.prototype.load = function(depot, success_callback) {
 	depot.get('feed_list',
 		function(object) {
 			this.length = 0;
-
+			
 			if(object === null) {
 				this.push.apply(this, MyMetaFeedList.getDefaultList());
 			} else {
@@ -126,17 +126,6 @@ MyMetaFeedList.prototype.load = function(depot, success_callback) {
 			Mojo.Log.error("Failed to load feed data due to depot error " + reason);
 		});
 };
-
-//TODO move somewhere else, as this is a app-specific global now.
-MetaFeedList = MyMetaFeedList([
-	new MetaFeed("MetaFilter", "http://feeds.feedburner.com/Metafilter"),
-	new MetaFeed("Ask MeFi", "http://feeds.feedburner.com/AskMetafilter"),
-	new MetaFeed("MeFi Projects", "http://feeds.feedburner.com/mefi/Projects"),
-	new MetaFeed("MeFi Music", "http://feeds.feedburner.com/mefi/Music"),
-	new MetaFeed("MeFi Jobs", "http://feeds.feedburner.com/MeFi/Jobs"),
-	new MetaFeed("MeFi IRL", "http://feeds.feedburner.com/MeFiIRL"),
-	new MetaFeed("MetaTalk", "http://feeds.feedburner.com/MeFi/MetaTalk")
-]);
 
 /**
  * Convert a JSON structure into a MetaFeedList
@@ -164,3 +153,6 @@ MyMetaFeedList.getDefaultList = function() {
 	    new MetaFeed("MetaTalk", "http://feeds.feedburner.com/MeFi/MetaTalk")                   
 	]);
 };
+
+//TODO move somewhere else, as this is a app-specific global now.
+MetaFeedList = MyMetaFeedList.getDefaultList();

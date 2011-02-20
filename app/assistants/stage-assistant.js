@@ -19,8 +19,10 @@
  */
 function StageAssistant() {
 	/* this is the creator function for your stage assistant object */
-	this.DEFAULT_FEED_TITLE = 'MetaFilter';
-	this.DEFAULT_FEED_URL = 'http://feeds.feedburner.com/Metafilter';
+	this.depot_model = {
+			name: "PreMeFi",
+			replace: false
+	};
 }
 
 /**
@@ -31,5 +33,17 @@ StageAssistant.prototype.setup = function() {
 	 * this function is for setup tasks that have to happen when the stage is
 	 * first created
 	 */
+	this.depot = new Mojo.Depot(this.depot_model,
+		this.depot_create_success.bind(this),
+		function() {
+			Mojo.Log.error("We could not create the " + this.depot_model.name + " depot!");
+		});
+};
+
+StageAssistant.prototype.depot_create_success = function() {
+	MetaFeedList.load(this.depot, this.depot_load_success.bind(this));
+};
+
+StageAssistant.prototype.depot_load_success = function() {
 	this.controller.pushScene('FeedView', 0);
 };
