@@ -77,9 +77,11 @@ MetaFeed.prototype.updateSuccess = function(transport) {
 		this.merge(new_list);
 		//this.m_list = FeedProcessor.processRSS(xml_text);
 	}
+	
 	Mojo.Controller.getAppController().sendToNotificationChain({
 		updating : false
 	});
+	MetaFeedList.save(MetaFeedList.depot);
 };
 
 /**

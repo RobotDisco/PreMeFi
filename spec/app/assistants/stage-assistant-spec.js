@@ -47,12 +47,11 @@ describe('MetaFeedList', function() {
 		expect(MetaFeedList).toContain(jasmine.any(MetaFeed));
 	});
 	it('should be restored from a depot store upon startup', function() {
-		var assistant;
 		runs(function() {
 			assistant = new StageAssistant();
 			spyOn(MetaFeedList, 'load').andCallThrough();
 			//spyOn(Mojo, 'Depot').andCallThrough();
-			spyOn(assistant, 'depot_load_success').andCallThrough();
+			spyOn(assistant, 'depot_load_success');
 			
 			assistant.setup();			
 		});
@@ -67,5 +66,13 @@ describe('MetaFeedList', function() {
 			//expect(MetaFeedList.load).toHaveBeenCalledWith(assistant.depot);
 			expect(MetaFeedList.load).toHaveBeenCalled();
 		});
+	});
+	it('should be saved to the depot when quitting', function() {
+		assistant = new StageAssistant();
+		spyOn(MetaFeedList, 'save');
+		
+		assistant.cleanup();
+		
+		expect(MetaFeedList.save).toHaveBeenCalled();
 	});
 });

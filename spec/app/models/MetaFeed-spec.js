@@ -74,6 +74,24 @@ describe( "MetaFeed", function() {
 					expect(feed.updateFailure).not
 							.toHaveBeenCalled();
 				});
+		it('saves the feed to the depot after updating', function() {
+			runs(function() {
+				spyOn(feed, 'updateSuccess').andCallThrough();
+				spyOn(MetaFeedList,'save');
+				
+				feed.update();
+				request = AjaxRequests.activeRequest();
+				request.response(TestResponses.success);
+			});
+			
+			waitsFor(function() {
+				return feed.updateSuccess.callCount > 0;
+			}, 'feed update success', 200);
+			
+			runs(function() {
+				expect(MetaFeedList.save).toHaveBeenCalled();
+			});
+		});
 
 		it('will not success content that is not an RSS 2.0 feed', function() {
 			spyOn(FeedProcessor, "processRSS");

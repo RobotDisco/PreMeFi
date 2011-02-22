@@ -40,7 +40,13 @@ StageAssistant.prototype.setup = function() {
 		});
 };
 
+StageAssistant.prototype.cleanup = function() {
+	MetaFeedList.save(this.depot);
+};
+
+
 StageAssistant.prototype.depot_create_success = function() {
+	MetaFeedList.depot = this.depot;
 	MetaFeedList.load(this.depot, this.depot_load_success.bind(this));
 };
 
