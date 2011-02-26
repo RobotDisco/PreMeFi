@@ -1,7 +1,7 @@
 {
-	"id": "com.p-is-np.metafilter",
+	"id": "net.thelambdacalculus.premefi",
 	"version": "0.1.9",
-	"vendor": "P=NP Softworks",
+	"vendor": "The Lambda Calculus",
 	"type": "web",
 	"main": "index.html",
 	"title": "PreMeFi",
